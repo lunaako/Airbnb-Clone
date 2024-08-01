@@ -1,9 +1,9 @@
-const router = require('express').Router();
+const router = require("express").Router();
+const { restoreUser } = require("../../utils/auth.js");
 
-// must be before any other middleware or route handlers
-const { restoreUser } = require('../../utils/auth.js');
-// if valid current user session, req.user is set to User in db
-// if not valid current user session, req.user is set to null
+// Connect restoreUser middleware to the API router
+  // If current user session is valid, set req.user to the user in the database
+  // If current user session is not valid, set req.user to null
 router.use(restoreUser);
 
 module.exports = router;
