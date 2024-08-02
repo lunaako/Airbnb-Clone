@@ -10,12 +10,39 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+//get all spots
 router.get('/', async (req, res)=> {
   const spots = await Spot.findAll();
-  // add avgRating to response body when reviews table's created
+  // add avgRating and previewImg to response body when reviews table's created
   res.status(200);
   return res.json({'Spots': spots});
+});
+
+//create a new spot 
+router.post('/', requireAuth, async(req, res) => {
+  const { user } = req;
+  const {address, city, state, country, lat, lng, name, description, price} = req.body;
+  try{
+    const id = user.id;
+    const newSpot = await Spot.create({
+      ownerId: id,
+      address,
+      city, 
+      state, 
+      country, 
+      lat, 
+      lng, 
+      name, 
+      description, 
+      price
+    });
+  
+    res.status(201).json(newSpot);
+  } catch(err) {
+    return res.json({errors: err.errors});
+  }
 })
+
 
 
 module.exports = router;
