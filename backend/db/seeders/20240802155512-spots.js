@@ -77,7 +77,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await Spot.bulkCreate(spots, {});
+    await Spot.bulkCreate(spots, {validate: true});
   },
 
   async down (queryInterface, Sequelize) {

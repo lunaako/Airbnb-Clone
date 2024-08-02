@@ -10,6 +10,47 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+const validateSpot = [
+  check('address')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Street address is required'),
+  check('city')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('City is required'),
+  check('state')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('State is required'),
+  check('country')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Country is required'),
+  check('lat')
+    .exists({ checkNull: true })
+    .isFloat({min: -90, max: 90})
+    .withMessage('Latitude must be within -90 and 90'),
+  check('lng')
+    .exists({ checkNull: true })
+    .isFloat({min: -180, max: 80})
+    .withMessage('Longitude must be within -180 and 180'),
+  check('name')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isLength({min: 1, max: 49})
+    .withMessage('Name must be less than 50 characters'),
+  check('description')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Description is required'),
+  check('price')
+    .exists({ checkFalsy: true })
+    .isFloat({min: 1})
+    .withMessage('Price per day must be a positive number'),
+handleValidationErrors
+];
+
 //get all spots
 router.get('/', async (req, res)=> {
   const spots = await Spot.findAll();
@@ -18,25 +59,26 @@ router.get('/', async (req, res)=> {
   return res.json({'Spots': spots});
 });
 
-//create a new spot 
-router.post('/', requireAuth, async(req, res) => {
+//create a new spot
+router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { user } = req;
   const {address, city, state, country, lat, lng, name, description, price} = req.body;
+
   try{
     const id = user.id;
     const newSpot = await Spot.create({
       ownerId: id,
       address,
-      city, 
-      state, 
-      country, 
-      lat, 
-      lng, 
-      name, 
-      description, 
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
       price
     });
-  
+
     res.status(201).json(newSpot);
   } catch(err) {
     return res.json({errors: err.errors});
