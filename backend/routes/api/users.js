@@ -30,8 +30,8 @@ const validateSignup = [
     .withMessage('Password must be 6 characters or more.'),
   handleValidationErrors
 ];
-// Sign up
 
+// Sign up
 router.post(
   '/',
   validateSignup,
@@ -49,7 +49,7 @@ router.post(
     };
 
     await setTokenCookie(res, safeUser);
-
+    res.status(201);
     return res.json({
       user: safeUser
     });
