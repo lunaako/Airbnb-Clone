@@ -5,36 +5,31 @@
 const {Review} = require('../models');
 const reviews = [
   {
-    "id": 1,
     "userId": 1,
     "spotId": 1,
     "review": "This was an awesome spot!",
     "stars": 5
   },
   {
-    "id": 2,
     "userId": 2,
     "spotId": 2,
     "review": "Great experience, highly recommend.",
     "stars": 4
   },
   {
-    "id": 3,
     "userId": 3,
     "spotId": 3,
     "review": "It was decent, but could be better.",
     "stars": 3
   },
   {
-    "id": 4,
-    "userId": 4,
+    "userId": 1,
     "spotId": 4,
     "review": "Not what I expected, quite disappointing.",
     "stars": 2
   },
   {
-    "id": 5,
-    "userId": 5,
+    "userId": 2,
     "spotId": 5,
     "review": "Terrible experience, will not return.",
     "stars": 1
