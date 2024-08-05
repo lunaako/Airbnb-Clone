@@ -83,6 +83,18 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
   } catch(err) {
     return res.json({errors: err.errors});
   }
+});
+
+//get all spots owned by the current user
+router.get('/current', requireAuth, async(req, res, next) => {
+  const { user } = req;
+  const ownerId = user.id;
+
+  const spots = await Spot.findAll({where: ownerId});
+
+  res.json({
+    Spots: spots
+  });
 })
 
 
