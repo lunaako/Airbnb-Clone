@@ -47,16 +47,21 @@ router.post(
     const isEmailExisted = await User.findAll({where: {email}});
     const isUsernameExisted = await User.findAll({where: {username}});
 
-    if (await isEmailExisted || await isUsernameExisted) {
-      const err = new Error('User already exists');
-      res.status(500).json({
+    if (isEmailExisted.length || isUsernameExisted.length) {
+      const errs = {};
+
+      if (isEmailExisted.length) {
+        errs.email = "User with that email already exists"
+      };
+
+      if (isUsernameExisted.length) {
+        errs.username = "User with that username already exists"
+      };
+
+      return res.status(500).json({
         "message": "User already exists",
-        "error":{
-          "email": "User with that email already exists",
-          "username": "User with that username already exists"
-        }
+        "errors": errs
       })
-      throw err;
     };
 
     const user = await User.create({ email, username, firstName, lastName, hashedPassword });

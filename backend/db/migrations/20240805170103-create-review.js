@@ -49,7 +49,7 @@ module.exports = {
       }
     }, options);
     await queryInterface.addIndex(
-      'Reviews', ['userId', 'spotId'], { unique: true }
+      'Reviews', ['userId', 'spotId'], { unique: true }, options
     );
   },
   async down(queryInterface, Sequelize) {
