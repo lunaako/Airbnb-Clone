@@ -109,6 +109,30 @@ router.get('/:id', async(req, res, next) => {
       message: "Spot couldn't be found"
     })
   }
+});
+
+//edit a spot
+router.put('/:id', requireAuth, validateSpot, async(req, res, next) => {
+  const { user } = req;
+  const { id:spotId } = req.params;
+  const userId = user.id;
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    res.status(404).json({
+      "message": "Spot couldn't be found"
+    })
+  };
+
+  if (spot.ownerId === userId) {
+    await spot.update(req.body);
+    res.json(spot);
+  } else {
+    res.status(403).json({
+      "message": "Forbidden"
+    })
+  }
+
 })
 
 
