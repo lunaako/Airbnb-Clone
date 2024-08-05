@@ -31,6 +31,29 @@ router.get('/current', requireAuth, async (req,res) => {
     // add ReviewImage in include later
     return res.json({'Reviews': reviews});
   }
+});
+
+//edit review
+router.put('/:reviewId', requireAuth, async (req,res) => {
+  const {review, stars} = req.body;
+  const {reviewId} = req.params;
+  const currentUserId = user.id;
+
+  const thisReview = await Review.findByPk(reviewId);
+  const reviewUserId = this.Review.userId;
+
+  if (thisReview) {
+    if (+currentUserId === +reviewUserId) {
+      this.Review.review = review;
+      this.Review.stars = stars;
+      return res.json(thisReview);
+    }
+  } else {
+    res.status(404);
+    return res.json({
+      "message": "Review couldn't be found"
+    });
+  }
 })
 
 module.exports = router;
