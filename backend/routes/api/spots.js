@@ -97,6 +97,19 @@ router.get('/current', requireAuth, async(req, res, next) => {
   });
 })
 
+//get details of a spot from an id
+router.get('/:id', async(req, res, next) => {
+  const { id } = req.params
+  const spot = await Spot.findByPk(id);
+
+  if (spot) {
+    res.json(spot);
+  } else {
+    res.status(404).json({
+      message: "Spot couldn't be found"
+    })
+  }
+})
 
 
 module.exports = router;
