@@ -33,7 +33,7 @@ const validateSpot = [
     .withMessage('Latitude must be within -90 and 90'),
   check('lng')
     .exists({ checkNull: true })
-    .isFloat({min: -180, max: 80})
+    .isFloat({min: -180, max: 180})
     .withMessage('Longitude must be within -180 and 180'),
   check('name')
     .exists({ checkFalsy: true })
@@ -83,8 +83,84 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
   } catch(err) {
     return res.json({errors: err.errors});
   }
+});
+
+//get all spots owned by the current user
+router.get('/current', requireAuth, async(req, res, next) => {
+  const { user } = req;
+  const ownerId = user.id;
+
+  const spots = await Spot.findAll({where: ownerId});
+
+  res.json({
+    Spots: spots
+  });
 })
 
+//get details of a spot from an id
+router.get('/:id', async(req, res, next) => {
+  const { id } = req.params
+  const spot = await Spot.findByPk(id);
+
+  if (spot) {
+    res.json(spot);
+  } else {
+    res.status(404).json({
+      message: "Spot couldn't be found"
+    })
+  }
+});
+
+//edit a spot
+router.put('/:id', requireAuth, validateSpot, async(req, res, next) => {
+  const { user } = req;
+  const { id:spotId } = req.params;
+  const userId = user.id;
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    res.status(404).json({
+      "message": "Spot couldn't be found"
+    })
+  };
+
+  if (spot.ownerId === userId) {
+    await spot.update(req.body);
+    res.json(spot);
+  } else {
+    res.status(403).json({
+      "message": "Forbidden"
+    })
+  }
+
+});
+
+//delete a spot 
+router.delete('/:id', requireAuth, async(req, res, next) => {
+  const { id: spotId } = req.params;
+  const { user } = req;
+  const userId = user.id;
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    res.status(404).json({
+      "message": "Spot couldn't be found"
+    })
+  }
+
+  if (spot.ownerId === userId) {
+    await spot.destroy();
+    res.json({
+      "message": "Successfully deleted"
+    })
+    
+  } else {
+    res.status(403).json({
+      "message": "Forbidden"
+    })
+  }
+  
+});
 
 
 module.exports = router;
