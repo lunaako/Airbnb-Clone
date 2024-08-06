@@ -45,15 +45,12 @@ router.get('/current', requireAuth, async (req,res) => {
 
 //edit review
 router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
-  const {reviewId} = req.params;
   const { user } = req;
-  const currentUserId = user.id;
-
+  const {reviewId} = req.params;
   const thisReview = await Review.findByPk(reviewId);
 
   if (thisReview) {
-    const reviewUserId = thisReview.userId;
-    if (+currentUserId === +reviewUserId) {
+    if (+user.id === +thisReview.userId) {
       await thisReview.update(req.body);
       return res.json(thisReview);
     } else {
@@ -70,13 +67,12 @@ router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
 })
 
 router.delete('/:reviewId', requireAuth, async (req, res) => {
-  const {reviewId} = req.params;
   const { user } = req;
-  const currentUserId = user.id;
+  const {reviewId} = req.params;
   const thisReview = await Review.findByPk(reviewId);
 
   if (thisReview) {
-    if (+currentUserId !== +thisReview.userId) {
+    if (+user.id !== +thisReview.userId) {
       res.status(403).json({
         "message": "Forbidden"
       })
