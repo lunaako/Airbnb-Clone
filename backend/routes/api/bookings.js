@@ -12,7 +12,7 @@ const router = express.Router();
 const validateBooking = [
   check('startDate')
     .custom((value) => {
-      if (new Date(value) <= new Date()) {
+      if (new Date(value) < new Date()) {
         throw new Error('startDate cannot be in the past');
       }
       return true;
@@ -67,7 +67,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
     })
   }
 
-  if (new Date(thisBooking.startDate) < new Date()) {
+  if (new Date(thisBooking.endDate) < new Date()) {
     return res.status(403).json({
       "message": "Past bookings can't be modified"
     })
