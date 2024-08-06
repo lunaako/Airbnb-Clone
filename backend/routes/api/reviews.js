@@ -70,6 +70,16 @@ router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
 })
 
 router.delete('/:reviewId', requireAuth, async (req, res) => {
+  const {reviewId} = req.params;
+  const { user } = req;
+  const currentUserId = user.id;
+  const thisReview = await Review.findByPk(reviewId);
+
+  if (+currentUserId !== +reviewUserId) {
+    res.status(403).json({
+      "message": "Forbidden"
+    })
+  }
 
 })
 
