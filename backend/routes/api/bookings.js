@@ -9,15 +9,25 @@ const { Booking, Spot } = require('../../db/models');
 
 const router = express.Router();
 
-// const validateReview = [
-//   check('review')
-//     .if(check('review').exists()).isLength({min: 1})
-//     .withMessage('Review text is required'),
-//   check('stars')
-//     .isInt({min: 1, max: 5})
-//     .withMessage('Stars must be an integer from 1 to 5'),
-// handleValidationErrors
-// ];
+const validateBooking = [
+  check('startDate')
+    .custom((value) => {
+      if (new Date(value) <= new Date()) {
+        throw new Error('startDate cannot be in the past');
+      }
+      return true;
+    }),
+  check('endDate')
+    .custom((value, { req }) => {
+      const startDate = new Date(req.body.startDate);
+      const endDate = new Date(value);
+      if (endDate <= startDate) {
+        throw new Error('endDate cannot be on or before startDate');
+      }
+      return true;
+    }),
+  handleValidationErrors
+];
 
 //get all bookings from current user
 router.get('/current', requireAuth, async (req,res) => {
@@ -38,5 +48,9 @@ router.get('/current', requireAuth, async (req,res) => {
     return res.json({'Bookings': bookings});
   }
 });
+
+router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
+
+})
 
 module.exports = router;
