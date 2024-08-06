@@ -61,12 +61,37 @@ const validateReview = [
 handleValidationErrors
 ];
 
+const validateQuery = [
+  check('page')
+    .optional()
+    .isInt({ min: 1})
+    .withMessage('Page must be greater than or equal to 1'),
+  check('size')
+    .optional()
+    .isInt({ min: 1, max: 20})
+    .withMessage('Size must be between 1 and 20'),
+  
+  handleValidationErrors
+];
+
 //get all spots
-router.get('/', async (req, res)=> {
-  const spots = await Spot.findAll();
   // add avgRating and previewImg to response body when reviews table's created
-  res.status(200);
-  return res.json({'Spots': spots});
+router.get('/', validateQuery, async (req, res)=> {
+  let { page=1, size=20 } = req.query;
+
+  page = +page;
+  size = +size;
+
+  const spots = await Spot.findAll({
+    limit: size,
+    offset: size * (page - 1)
+  });
+
+  return res.json({
+    'Spots': spots,
+    'page': page,
+    'size': size
+  });
 });
 
 //create a new spot
