@@ -47,12 +47,12 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   try {
+    try {
     await Booking.bulkCreate(bookings, {validate: true});
-   } catch(err) {
+    } catch(err) {
     console.error(err);
     throw err;
-   }
+    }
   },
 
   async down (queryInterface, Sequelize) {

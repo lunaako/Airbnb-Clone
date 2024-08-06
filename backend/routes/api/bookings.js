@@ -89,7 +89,9 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
       });
 
       if (conflictingBookings.length > 0) {
-        throw new Error('Start date conflicts with an existing booking');
+        const err = new Error('Start date conflicts with an existing booking');
+        errs.startDate = err;
+        throw err;
       }
     }
 
@@ -107,18 +109,19 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
       });
 
       if (conflictingBookings.length > 0) {
-        throw new Error('End date conflicts with an existing booking');
+        const err = new Error('End date conflicts with an existing booking');
+        throw err;
       }
     }
 
-    await thisBooking.update(req.body);
-    return res.json(thisBooking);
-  } catch(e) {
+  } catch(err) {
     return res.json({
       "message": "Sorry, this spot is already booked for the specified dates",
-      "errors": {e}
+      "errors": err.message
     })
   }
+  await thisBooking.update(req.body);
+  return res.json(thisBooking);
 })
 
 module.exports = router;
