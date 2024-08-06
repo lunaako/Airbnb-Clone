@@ -50,7 +50,25 @@ router.get('/current', requireAuth, async (req,res) => {
 });
 
 router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
+  const { user } = req;
+  const {bookingId} = req.params;
+  const thisBooking = await Booking.findByPk(bookingId);
 
+  if (!thisBooking) {
+    res.status(404);
+    return res.json({
+      "message": "Booking couldn't be found"
+    });
+  } else {
+    if (thisBooking.startDate < new Date()) {
+      return res.status(403).json({
+        "message": "Past bookings can't be modified"
+      })
+    } else {
+      await thisBooking.update(req.body);
+      return res.json(thisBooking);
+    }
+  }
 })
 
 module.exports = router;
