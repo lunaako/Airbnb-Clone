@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage} = require('../../db/models');
+const { Spot, Review, User, ReviewImage} = require('../../db/models');
 
 //import check function and handleValidationError function for validating signup
 const { check } = require('express-validator');
@@ -94,6 +94,36 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
   res.json({
     Spots: spots
+  });
+});
+
+//get all reviews by a spot's id
+router.get('/:id/reviews', async(req, res, next) => {
+  const { id: spotId } = req.params;
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    res.status(404).json(
+      {
+        "message": "Spot couldn't be found"
+      }
+    )
+  };
+  
+  const reviews = await Review.findAll({
+    where: { spotId },
+    include: [{
+      model: User,
+      attributes: ['id', 'firstName', 'lastName']
+    },
+    {
+      model: ReviewImage,
+      attributes: ['id', 'url']
+    }]
+  })
+
+  res.json({
+    "Reviews": reviews
   });
 })
 
