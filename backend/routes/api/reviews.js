@@ -9,6 +9,20 @@ const { Review, User, Spot } = require('../../db/models');
 
 const router = express.Router();
 
+const validateReview = [
+  check('review')
+    // .exists({ checkFalsy: true })
+    // .notEmpty()
+    .isString()
+    .withMessage('Review text is required'),
+  check('stars')
+    // .exists({ checkFalsy: true })
+    // .notEmpty()
+    .isInt({min: 1, max: 5})
+    .withMessage('Stars must be an integer from 1 to 5'),
+handleValidationErrors
+];
+
 //get all reviews of current user
 router.get('/current', requireAuth, async (req,res) => {
   const {user} = req;
@@ -34,7 +48,7 @@ router.get('/current', requireAuth, async (req,res) => {
 });
 
 //edit review
-router.put('/:reviewId', requireAuth, async (req,res) => {
+router.put('/:reviewId', requireAuth, validateReview, async (req,res) => {
   const {review, stars} = req.body;
   const {reviewId} = req.params;
   const currentUserId = user.id;
