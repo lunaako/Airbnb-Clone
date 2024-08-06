@@ -69,4 +69,8 @@ router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
   }
 })
 
+router.delete('/:reviewId', requireAuth, async (req, res) => {
+
+})
+
 module.exports = router;
