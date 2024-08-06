@@ -49,7 +49,7 @@ router.get('/current', requireAuth, async (req,res) => {
 
 //edit review
 router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
-  const {review, stars} = req.body;
+  // const {review, stars} = req.body;
   const {reviewId} = req.params;
   const currentUserId = user.id;
 
@@ -58,8 +58,7 @@ router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
 
   if (thisReview) {
     if (+currentUserId === +reviewUserId) {
-      this.Review.review = review;
-      this.Review.stars = stars;
+      await thisReview.update(req.body);
       return res.json(thisReview);
     }
   } else {
