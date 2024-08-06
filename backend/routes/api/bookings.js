@@ -5,7 +5,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
-const { Booking, User, Spot } = require('../../db/models');
+const { Booking, Spot } = require('../../db/models');
 
 const router = express.Router();
 
@@ -18,5 +18,25 @@ const router = express.Router();
 //     .withMessage('Stars must be an integer from 1 to 5'),
 // handleValidationErrors
 // ];
+
+//get all bookings from current user
+router.get('/current', requireAuth, async (req,res) => {
+  const {user} = req;
+
+  if (user) {
+    const currentUserId = user.id;
+    const bookings = await Booking.findAll({
+      where: {
+        userId: currentUserId
+      },
+      include: [{
+        model: Spot,
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'description']
+        }
+      }]})
+    return res.json({'Bookings': bookings});
+  }
+});
 
 module.exports = router;
