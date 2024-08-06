@@ -50,9 +50,9 @@ router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
   const currentUserId = user.id;
 
   const thisReview = await Review.findByPk(reviewId);
-  const reviewUserId = thisReview.userId;
 
   if (thisReview) {
+    const reviewUserId = thisReview.userId;
     if (+currentUserId === +reviewUserId) {
       await thisReview.update(req.body);
       return res.json(thisReview);
