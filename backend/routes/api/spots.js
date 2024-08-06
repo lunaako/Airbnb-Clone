@@ -250,7 +250,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async(req, res, next) =
     }
   });
 
-  if (existedReview) {
+  if (existedReview.length) {
     return res.status(500).json({
       "message": "User already has a review for this spot"
     })
@@ -262,7 +262,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async(req, res, next) =
     userId
   })
 
-  res.json(newReview);
+  res.status(201).json(newReview);
 });
 
 //get all bookings for a spot
@@ -333,7 +333,7 @@ router.post('/:id/bookings', requireAuth, async(req, res, next) => {
     endDate
   });
 
-  res.json(newBooking);
+  res.status(201).json(newBooking);
 })
 
 module.exports = router;
