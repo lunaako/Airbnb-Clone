@@ -302,7 +302,38 @@ router.get('/:id/bookings', requireAuth, async(req, res, next) => {
   res.json({
     "Bookings": booking
   })
+});
 
+//create a booking from spot
+router.post('/:id/bookings', requireAuth, async(req, res, next) => {
+  const { id } = req.params;
+  const { user } = req;
+  const { startDate, endDate } = req.body;
+
+  const spot = await Spot.findByPk(id);
+  const userId = user.id;
+
+  if (!spot) {
+    res.status(404).json(
+      {
+        "message": "Spot couldn't be found"
+      }
+    )
+  };
+
+  if (userId === spot.ownerId) {
+    return res.status(403).json({
+      "message": "Forbidden"
+    })
+  };
+
+  const newBooking = await spot.createBooking({
+    userId,
+    startDate,
+    endDate
+  });
+
+  res.json(newBooking);
 })
 
 module.exports = router;

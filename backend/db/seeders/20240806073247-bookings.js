@@ -8,8 +8,8 @@ const bookings = [
   {
     spotId: 1,
     userId: 1,
-    startDate: '2024-08-01',
-    endDate: '2024-08-07'
+    startDate: '2024-08-21',
+    endDate: '2024-08-22'
   },
   {
     spotId: 2,
@@ -47,7 +47,12 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await Booking.bulkCreate(bookings);
+   try {
+    await Booking.bulkCreate(bookings, {validate: true});
+   } catch(err) {
+    console.error(err);
+    throw err;
+   }
   },
 
   async down (queryInterface, Sequelize) {
