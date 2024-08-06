@@ -40,13 +40,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: true,
-        isAfter: new Date(),
-        isBefore: new Date(this.endDate),
-        // isAfterCurrentDate(value) {
-        //   if (new Date(value) <= new Date()) {
-        //     throw new Error('startDate cannot be in the past');
-        //   }
-        // }
+        isAfter: new Date().toISOString(),
+        isBeforeEndDate(value) {
+          if (value >= this.endDate) {
+            throw new Error('startDate cannot be in the past');
+          }
+        }
       }
     },
     endDate: {
@@ -54,12 +53,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: true,
-        isAfter: new Date(this.startDate),
-        // isAfterStartDate(value) {
-        //   if (new Date(value) <= new Date(this.startDate)) {
-        //     throw new Error('endDate cannot be on or before startDate');
-        //   }
-        // }
+        isAfterStartDate(value) {
+          if (value <= this.startDate) {
+            throw new Error('endDate cannot be on or before startDate');
+          }
+        }
       }
     }
   }, {

@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, User, ReviewImage} = require('../../db/models');
+const { Spot, Review, User, ReviewImage, Booking} = require('../../db/models');
 
 //import check function and handleValidationError function for validating signup
 const { check } = require('express-validator');
@@ -264,5 +264,76 @@ router.post('/:id/reviews', requireAuth, validateReview, async(req, res, next) =
 
   res.json(newReview);
 });
+
+//get all bookings for a spot
+router.get('/:id/bookings', requireAuth, async(req, res, next) => {
+  const { id } = req.params;
+  const { user } = req;
+  const userId = user.id;
+
+  const spot = await Spot.findByPk(id);
+
+  if (!spot) {
+    res.status(404).json({
+      "message": "Spot couldn't be found"
+    })
+  };
+
+  let booking;
+  if (userId !== spot.ownerId) {
+    booking = await Booking.findAll({
+      where: {
+        spotId: id
+      },
+      attributes: ['spotId', 'startDate', 'endDate']
+    })
+  } else {
+    booking = await Booking.findAll({
+      where: {
+        spotId: id
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      }
+    })
+  };
+
+  res.json({
+    "Bookings": booking
+  })
+});
+
+//create a booking from spot
+router.post('/:id/bookings', requireAuth, async(req, res, next) => {
+  const { id } = req.params;
+  const { user } = req;
+  const { startDate, endDate } = req.body;
+
+  const spot = await Spot.findByPk(id);
+  const userId = user.id;
+
+  if (!spot) {
+    res.status(404).json(
+      {
+        "message": "Spot couldn't be found"
+      }
+    )
+  };
+
+  if (userId === spot.ownerId) {
+    return res.status(403).json({
+      "message": "Forbidden"
+    })
+  };
+
+  const newBooking = await spot.createBooking({
+    userId,
+    startDate,
+    endDate
+  });
+
+  res.json(newBooking);
+})
 
 module.exports = router;
