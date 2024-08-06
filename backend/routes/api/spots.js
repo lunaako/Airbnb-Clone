@@ -222,7 +222,7 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
     preview
   });
 
-  res.json(newImg);
+  res.status(201).json(newImg);
 })
 
 
