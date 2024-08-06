@@ -24,14 +24,14 @@ const bookings = [
     endDate: '2024-08-25'
   },
   {
-    spotId: 4,
-    userId: 1,
+    spotId: 5,
+    userId: 2,
     startDate: '2024-09-01',
     endDate: '2024-09-05'
   },
   {
     spotId: 5,
-    userId: 2,
+    userId: 3,
     startDate: '2024-09-10',
     endDate: '2024-09-15'
   }

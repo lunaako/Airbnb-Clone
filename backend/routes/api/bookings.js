@@ -11,18 +11,60 @@ const router = express.Router();
 
 const validateBooking = [
   check('startDate')
-    .custom((value) => {
-      if (new Date(value) < new Date()) {
+    .custom(async (value, { req }) => {
+      const startDate = new Date(value);
+      if (startDate < new Date()) {
         throw new Error('startDate cannot be in the past');
+      }
+
+      const {bookingId} = req.params;
+      const { endDate } = req.body;
+      if (endDate) {
+        const end = new Date(endDate);
+        const thisBooking = await Booking.findByPk(bookingId);
+        const conflictingBookings = await Booking.findAll({
+          where: {
+            spotId: thisBooking.spotId,
+            startDate: {
+              [Op.lt]: end
+            },
+            endDate: {
+              [Op.gt]: startDate
+            }
+          }
+        });
+
+        if (conflictingBookings.length > 0) {
+          throw new Error('Start date conflicts with an existing booking');
+        }
       }
       return true;
     }),
   check('endDate')
-    .custom((value, { req }) => {
+    .custom(async (value, { req }) => {
       const startDate = new Date(req.body.startDate);
       const endDate = new Date(value);
       if (endDate <= startDate) {
         throw new Error('endDate cannot be on or before startDate');
+      }
+      const { bookingId } = req.params;
+      const thisBooking = await Booking.findByPk(bookingId);
+      if (startDate) {
+        const conflictingBookings = await Booking.findAll({
+          where: {
+            spotId: thisBooking.spotId,
+            startDate: {
+              [Op.lt]: endDate
+            },
+            endDate: {
+              [Op.gt]: startDate
+            }
+          }
+        });
+
+        if (conflictingBookings.length > 0) {
+          throw new Error('End date conflicts with an existing booking');
+        }
       }
       return true;
     }),
@@ -55,8 +97,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const thisBooking = await Booking.findByPk(bookingId);
 
   if (!thisBooking) {
-    res.status(404);
-    return res.json({
+    return res.status(404).json({
       "message": "Booking couldn't be found"
     });
   }
@@ -71,10 +112,10 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
     return res.status(403).json({
       "message": "Past bookings can't be modified"
     })
-  } else {
-    await thisBooking.update(req.body);
-    return res.json(thisBooking);
   }
+
+  await thisBooking.update(req.body);
+  return res.json(thisBooking);
 })
 
 module.exports = router;
