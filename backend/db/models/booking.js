@@ -37,15 +37,30 @@ module.exports = (sequelize, DataTypes) => {
     },
     startDate: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isDate: true,
+        isAfter: new Date(),
+        isBefore: this.endDate
+      }
     },
     endDate: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isDate: true,
+        isAfter: this.startDate,
+      }
     }
   }, {
     sequelize,
     modelName: 'Booking',
+    indexes: [
+      {
+        unique: true,
+        fields: ['spotId', 'startDate']
+      }
+    ]
   });
   return Booking;
 };
