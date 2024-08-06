@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage} = require('../../db/models');
+const { Spot, Review, User, ReviewImage} = require('../../db/models');
 
 //import check function and handleValidationError function for validating signup
 const { check } = require('express-validator');
@@ -51,6 +51,16 @@ const validateSpot = [
 handleValidationErrors
 ];
 
+const validateReview = [
+  check('review')
+    .if(check('review').exists()).isLength({min: 1})
+    .withMessage('Review text is required'),
+  check('stars')
+    .isInt({min: 1, max: 5})
+    .withMessage('Stars must be an integer from 1 to 5'),
+handleValidationErrors
+];
+
 //get all spots
 router.get('/', async (req, res)=> {
   const spots = await Spot.findAll();
@@ -94,6 +104,36 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
   res.json({
     Spots: spots
+  });
+});
+
+//get all reviews by a spot's id
+router.get('/:id/reviews', async(req, res, next) => {
+  const { id: spotId } = req.params;
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    res.status(404).json(
+      {
+        "message": "Spot couldn't be found"
+      }
+    )
+  };
+  
+  const reviews = await Review.findAll({
+    where: { spotId },
+    include: [{
+      model: User,
+      attributes: ['id', 'firstName', 'lastName']
+    },
+    {
+      model: ReviewImage,
+      attributes: ['id', 'url']
+    }]
+  })
+
+  res.json({
+    "Reviews": reviews
   });
 })
 
@@ -185,5 +225,44 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
   res.json(newImg);
 })
 
+
+//create a review for a spot based on the spot's id
+router.post('/:id/reviews', requireAuth, validateReview, async(req, res, next) => {
+  const { id } = req.params;
+  const{ review, stars } = req.body;
+  const { user } = req;
+  const userId = user.id;
+
+  const spot = await Spot.findByPk(id);
+
+  if (!spot) {
+    return res.status(404).json(
+      {
+        "message": "Spot couldn't be found"
+      }
+    )
+  };
+
+  const existedReview = await Review.findAll({
+    where: {
+      userId,
+      spotId: id,
+    }
+  });
+
+  if (existedReview) {
+    return res.status(500).json({
+      "message": "User already has a review for this spot"
+    })
+  }
+
+  const newReview = await spot.createReview({
+    review,
+    stars,
+    userId
+  })
+
+  res.json(newReview);
+});
 
 module.exports = router;
