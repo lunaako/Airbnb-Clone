@@ -120,7 +120,6 @@ router.get('/current', requireAuth, async (req,res) => {
 });
 
 router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
-  const { user } = req;
   const {bookingId} = req.params;
   const thisBooking = await Booking.findByPk(bookingId);
 
@@ -144,6 +143,27 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
 
   await thisBooking.update(req.body);
   return res.json(thisBooking);
+});
+
+router.delete('/:bookingId', requireAuth, async(req, res) => {
+  const { user } = req;
+  const {bookingId} = req.params;
+  const thisBooking = await Booking.findByPk(bookingId);
+  
+  if (!thisBooking) {
+    return res.status(404).json({
+      "message": "Booking couldn't be found"
+    });
+  }
+  if (+user.id !== +thisBooking.userId) {
+    return res.status(403).json({
+      "message": "Forbidden"
+    })
+  }
+  await thisBooking.destroy();
+  res.json({
+    "message": "Successfully deleted"
+  })
 })
 
 module.exports = router;
