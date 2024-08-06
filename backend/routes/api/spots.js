@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { Spot, Review, User, ReviewImage, Booking} = require('../../db/models');
@@ -70,19 +71,54 @@ const validateQuery = [
     .optional()
     .isInt({ min: 1, max: 20})
     .withMessage('Size must be between 1 and 20'),
-  
+  check('minLat')
+    .optional()
+    .isFloat({ min: -90, max: 90})
+    .withMessage('Minimum latitude is invalid'),
+  check('maxLat')
+    .optional()
+    .isFloat({ min: -90, max: 90})
+    .withMessage('Maximum latitude is invalid'),
+  check('minLng')
+    .optional()
+    .isFloat({ min: -180, max: 180})
+    .withMessage('Minimum longtitude is invalid'),
+  check('maxLng')
+    .optional()
+    .isFloat({ min: -180, max: 180})
+    .withMessage('Maximum longtitude is invalid'),
+  check('minPrice')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Minimum price must be greater than or equal to 0'),
+  check('maxPrice')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Maximum price must be greater than or equal to 0'),
   handleValidationErrors
 ];
 
 //get all spots
   // add avgRating and previewImg to response body when reviews table's created
 router.get('/', validateQuery, async (req, res)=> {
-  let { page=1, size=20 } = req.query;
+  let { page=1, size=20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
 
   page = +page;
   size = +size;
 
+  let where = {};
+
+  if (minLat) where.lat = {[Op.gte]: minLat};
+  if (maxLat) where.lat = {[Op.lte]: maxLat};
+
+  if (minLng) where.lng = {[Op.gte]: minLng};
+  if (maxLng) where.lng = {[Op.lte]: maxLng};
+
+  if (minPrice) where.price = {[Op.gte]: minPrice};
+  if (maxPrice) where.price = {[Op.lte]: maxPrice};
+
   const spots = await Spot.findAll({
+    where,
     limit: size,
     offset: size * (page - 1)
   });
