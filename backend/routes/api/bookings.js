@@ -59,15 +59,21 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
     return res.json({
       "message": "Booking couldn't be found"
     });
+  }
+
+  if (+user.id !== +thisBooking.userId) {
+    return res.status(403).json({
+      "message": "Forbidden"
+    })
+  }
+
+  if (new Date(thisBooking.startDate) < new Date()) {
+    return res.status(403).json({
+      "message": "Past bookings can't be modified"
+    })
   } else {
-    if (thisBooking.startDate < new Date()) {
-      return res.status(403).json({
-        "message": "Past bookings can't be modified"
-      })
-    } else {
-      await thisBooking.update(req.body);
-      return res.json(thisBooking);
-    }
+    await thisBooking.update(req.body);
+    return res.json(thisBooking);
   }
 })
 
