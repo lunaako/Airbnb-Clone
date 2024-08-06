@@ -8,34 +8,19 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Reviews', {
+    await queryInterface.createTable('ReviewImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      spotId: {
+      reviewId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Spots'
-        }
+        references: {model: 'Reviews'}
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users'
-        }
-      },
-      review: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      stars: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+      url: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -48,13 +33,10 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     }, options);
-    // await queryInterface.addIndex(
-    //   'Reviews', ['userId', 'spotId'], { unique: true, ...options }, 
-    // );
   },
+
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Reviews';
-    // await queryInterface.removeIndex(options, ['userId', 'spotId']);
+    options.tableName = 'ReviewImages';
     await queryInterface.dropTable(options);
   }
 };
