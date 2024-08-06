@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot } = require('../../db/models');
+const { Spot, SpotImage} = require('../../db/models');
 
 //import check function and handleValidationError function for validating signup
 const { check } = require('express-validator');
@@ -161,6 +161,29 @@ router.delete('/:id', requireAuth, async(req, res, next) => {
   }
   
 });
+
+//add an img to a spot based on spot id
+router.post('/:id/images', requireAuth, async(req, res, next) => {
+  const { id } = req.params;
+  const { url, preview } = req.body;
+  const { user } = req;
+  const spot = await Spot.findByPk(id);
+
+  if (user.id !== spot.ownerId) {
+    return res.status(403).json({
+      "message": "Forbidden"
+    })
+  };
+
+  if (!spot) res.status(404).json({"message": "Spot couldn't be found"});
+
+  const newImg = await spot.createSpotImage({
+    url,
+    preview
+  });
+
+  res.json(newImg);
+})
 
 
 module.exports = router;
