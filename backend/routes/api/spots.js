@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, User, ReviewImage, Booking} = require('../../db/models');
+const { Spot, Review, User, ReviewImage, Booking, SpotImage} = require('../../db/models');
 
 //import check function and handleValidationError function for validating signup
 const { check } = require('express-validator');
@@ -266,9 +266,20 @@ router.get('/:id/reviews', async(req, res, next) => {
 //get details of a spot from an id
 router.get('/:id', async(req, res, next) => {
   const { id } = req.params
-  const spot = await Spot.findByPk(id);
+  const spot = await Spot.findByPk(id, {
+    include: [
+      {
+        model: SpotImage,
+        attributes: ['id', 'url', 'preview']
+      }
+    ]
+  });
 
   if (spot) {
+    const owner = await User.findByPk(spot.ownerId, {
+      attributes: ['id', 'firstName', 'lastName']
+    });
+
     const reviewCount = await Review.count({
       where: {spotId: spot.id},
     });
@@ -286,6 +297,7 @@ router.get('/:id', async(req, res, next) => {
     const spotWizRating = spot.toJSON();
     spotWizRating.avgStarRating = avgRating;
     spotWizRating.numReviews = reviewCount;
+    spotWizRating.Owner = owner;
 
     return res.json(spotWizRating);
 
