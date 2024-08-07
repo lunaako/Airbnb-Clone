@@ -206,8 +206,30 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
   const spots = await Spot.findAll({where: ownerId});
 
+  const spotsWizRatings = [];
+  for (let spot of spots) {
+
+    const reviewCount = await Review.count({
+      where: {spotId: spot.id},
+    });
+
+    const totalStars = await Review.sum('stars', {
+      where: {spotId: spot.id}
+    });
+
+    let avgRating = totalStars / reviewCount;
+
+    if (!avgRating) {
+      avgRating = null;
+    };
+
+    const spotWizRating = spot.toJSON();
+    spotWizRating.avgRating = avgRating;
+    spotsWizRatings.push(spotWizRating);
+  };
+
   res.json({
-    Spots: spots
+    Spots: spotsWizRatings
   });
 });
 
@@ -247,9 +269,28 @@ router.get('/:id', async(req, res, next) => {
   const spot = await Spot.findByPk(id);
 
   if (spot) {
-    res.json(spot);
+    const reviewCount = await Review.count({
+      where: {spotId: spot.id},
+    });
+
+    const totalStars = await Review.sum('stars', {
+      where: {spotId: spot.id}
+    });
+
+    let avgRating = totalStars / reviewCount;
+
+    if (!avgRating) {
+      avgRating = null;
+    };
+
+    const spotWizRating = spot.toJSON();
+    spotWizRating.avgRating = avgRating;
+    spotWizRating.numReviews = reviewCount;
+
+    return res.json(spotWizRating);
+
   } else {
-    res.status(404).json({
+    return res.status(404).json({
       message: "Spot couldn't be found"
     })
   }
