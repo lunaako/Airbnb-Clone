@@ -163,21 +163,21 @@ router.get('/', validateQuery, async (req, res)=> {
       avgRating = null;
     };
 
-    const spotImgs = await SpotImage.findAll({
+    const previewImg = await SpotImage.findOne({
       where: {
         spotId: spot.id,
         preview: true
       },
+      attributes: ['url']
     });
-
-    let previewImage = 'No preview image';
-    if (spotImgs.length) {
-      previewImage = spotImgs.map(spotImg => spotImg.url).join();
-    } 
 
     const spotWizRating = spot.toJSON();
     spotWizRating.avgRating = avgRating;
-    spotWizRating.previewImage = previewImage;
+    if(previewImg) {
+      spotWizRating.previewImage = previewImg.url;
+    } else {
+      spotWizRating.previewImage = null;
+    }
     spotsWizRatings.push(spotWizRating);
     
   };
@@ -238,8 +238,22 @@ router.get('/current', requireAuth, async(req, res, next) => {
       avgRating = null;
     };
 
+    const previewImg = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true
+      },
+      attributes: ['url']
+    });
+
+
     const spotWizRating = spot.toJSON();
     spotWizRating.avgRating = avgRating;
+    if(previewImg) {
+      spotWizRating.previewImage = previewImg.url;
+    } else {
+      spotWizRating.previewImage = null;
+    }
     spotsWizRatings.push(spotWizRating);
   };
 
@@ -395,7 +409,11 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
     preview
   });
 
-  res.status(201).json(newImg);
+  const newImgInfo = await SpotImage.findByPk(newImg.id, {
+    attributes: ['id', 'url', 'preview']
+  })
+
+  res.status(201).json(newImgInfo);
 })
 
 
