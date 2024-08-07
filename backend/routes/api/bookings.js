@@ -79,15 +79,15 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
     where: {
       spotId: spotId,
 
-      [Op.and]: [
+      [Op.or]: [
         {
           startDate: {
-            [Op.lt]: startDate
+            [Op.gt]: startDate
           }
         },
         {
           endDate: {
-            [Op.gt]: startDate
+            [Op.lt]: startDate
           }
         }
       ]
