@@ -75,6 +75,8 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
 
   const spotId = thisBooking.spotId;
   const { startDate, endDate } = req.body;
+  const newStartDate = new Date(startDate);
+  const newEndDate = new Date(endDate);
   const bookingStartConflict = await Booking.findOne({
     where: {
       spotId: spotId,
@@ -82,18 +84,18 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
         {
           [Op.or]: [
             {
-              startDate: startDate
+              startDate: newStartDate
             },
             {
               [Op.and]: [
                 {
                   startDate: {
-                    [Op.lt]: startDate
+                    [Op.lt]: newStartDate
                   }
                 },
                 {
                   endDate: {
-                    [Op.gt]: startDate
+                    [Op.gt]: newStartDate
                   }
                 }
               ]
@@ -102,7 +104,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
         },
         {
           endDate: {
-            [Op.ne]: startDate
+            [Op.ne]: newStartDate
           }
         }
       ]
@@ -114,18 +116,18 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
       spotId: spotId,
       [Op.or]: [
         {
-          endDate: endDate
+          endDate: newEndDate
         },
         {
           [Op.and]: [
             {
               startDate: {
-                [Op.lt]: endDate
+                [Op.lt]: newEndDate
               }
             },
             {
               endDate: {
-                [Op.gt]: endDate
+                [Op.gt]: newEndDate
               }
             }
           ]
@@ -140,12 +142,12 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
       [Op.and]: [
         {
           startDate: {
-            [Op.gt]: startDate
+            [Op.gt]: newStartDate
           }
         },
         {
           endDate: {
-            [Op.lt]: endDate
+            [Op.lt]: newEndDate
           }
         }
       ]
