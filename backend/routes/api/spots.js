@@ -163,21 +163,21 @@ router.get('/', validateQuery, async (req, res)=> {
       avgRating = null;
     };
 
-    const spotImgs = await SpotImage.findAll({
+    const previewImg = await SpotImage.findOne({
       where: {
         spotId: spot.id,
         preview: true
       },
+      attributes: ['url']
     });
-
-    let previewImage = 'No preview image';
-    if (spotImgs.length) {
-      previewImage = spotImgs.map(spotImg => spotImg.url).join();
-    } 
 
     const spotWizRating = spot.toJSON();
     spotWizRating.avgRating = avgRating;
-    spotWizRating.previewImage = previewImage;
+    if(previewImg) {
+      spotWizRating.previewImage = previewImg.url;
+    } else {
+      spotWizRating.previewImage = null;
+    }
     spotsWizRatings.push(spotWizRating);
     
   };
