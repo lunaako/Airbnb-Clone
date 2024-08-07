@@ -20,14 +20,16 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'Spots'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Users'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       review: {
         type: Sequelize.STRING,
@@ -49,7 +51,7 @@ module.exports = {
       }
     }, options);
     // await queryInterface.addIndex(
-    //   'Reviews', ['userId', 'spotId'], { unique: true, ...options }, 
+    //   'Reviews', ['userId', 'spotId'], { unique: true, ...options },
     // );
   },
   async down(queryInterface, Sequelize) {
