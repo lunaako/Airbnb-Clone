@@ -25,6 +25,15 @@ router.get('/current', requireAuth, async (req,res) => {
 
   if (user) {
     const currentUserId = user.id;
+
+    const previewImg = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true
+      },
+      attributes: ['url']
+    });
+    
     const reviews = await Review.findAll({
       where: {
         userId: currentUserId
@@ -57,7 +66,7 @@ router.put('/:reviewId', requireAuth, validateReview, async(req,res) => {
       await thisReview.update(req.body);
       return res.json(thisReview);
     } else {
-      res.status(403).json({
+      return res.status(403).json({
         "message": "Forbidden"
       })
     }
@@ -76,12 +85,12 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
 
   if (thisReview) {
     if (+user.id !== +thisReview.userId) {
-      res.status(403).json({
+      return res.status(403).json({
         "message": "Forbidden"
       })
     } else {
       await thisReview.destroy();
-      res.json({
+      return res.json({
         "message": "Successfully deleted"
       })
     }
@@ -101,7 +110,7 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
   const review = await Review.findByPk(reviewId);
 
 
-  if (!review) res.status(404).json({"message": "Review couldn't be found"});
+  if (!review) return res.status(404).json({"message": "Review couldn't be found"});
 
   if (user.id !== review.userId) {
     return res.status(403).json({
