@@ -238,8 +238,22 @@ router.get('/current', requireAuth, async(req, res, next) => {
       avgRating = null;
     };
 
+    const previewImg = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true
+      },
+      attributes: ['url']
+    });
+
+
     const spotWizRating = spot.toJSON();
     spotWizRating.avgRating = avgRating;
+    if(previewImg) {
+      spotWizRating.previewImage = previewImg.url;
+    } else {
+      spotWizRating.previewImage = null;
+    }
     spotsWizRatings.push(spotWizRating);
   };
 
