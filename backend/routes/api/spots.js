@@ -144,6 +144,7 @@ router.get('/', validateQuery, async (req, res)=> {
     offset: size * (page - 1)
   });
 
+  //add avgRating key & previewImage keys
   const spotsWizRatings = [];
 
   for (let spot of spots) {
@@ -162,9 +163,23 @@ router.get('/', validateQuery, async (req, res)=> {
       avgRating = null;
     };
 
+    const spotImgs = await SpotImage.findAll({
+      where: {
+        spotId: spot.id,
+        preview: true
+      },
+    });
+
+    let previewImage = 'No preview image';
+    if (spotImgs.length) {
+      previewImage = spotImgs.map(spotImg => spotImg.url).join();
+    } 
+
     const spotWizRating = spot.toJSON();
     spotWizRating.avgRating = avgRating;
+    spotWizRating.previewImage = previewImage;
     spotsWizRatings.push(spotWizRating);
+    
   };
   return res.json({
     'Spots': spotsWizRatings,
@@ -366,13 +381,14 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
   const { user } = req;
   const spot = await Spot.findByPk(id);
 
+  if (!spot) res.status(404).json({"message": "Spot couldn't be found"});
+
   if (user.id !== spot.ownerId) {
     return res.status(403).json({
       "message": "Forbidden"
     })
   };
 
-  if (!spot) res.status(404).json({"message": "Spot couldn't be found"});
 
   const newImg = await spot.createSpotImage({
     url,
