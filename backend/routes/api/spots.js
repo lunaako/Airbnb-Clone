@@ -207,7 +207,7 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
       price
     });
 
-    res.status(201).json(newSpot);
+    return res.status(201).json(newSpot);
 });
 
 //get all spots owned by the current user
@@ -253,7 +253,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
     spotsWizRatings.push(spotWizRating);
   };
 
-  res.json({
+  return res.json({
     Spots: spotsWizRatings
   });
 });
@@ -264,7 +264,7 @@ router.get('/:id/reviews', async(req, res, next) => {
   const spot = await Spot.findByPk(spotId);
 
   if (!spot) {
-    res.status(404).json(
+    return res.status(404).json(
       {
         "message": "Spot couldn't be found"
       }
@@ -283,7 +283,7 @@ router.get('/:id/reviews', async(req, res, next) => {
     }]
   })
 
-  res.json({
+  return res.json({
     "Reviews": reviews
   });
 })
@@ -341,16 +341,16 @@ router.put('/:id', requireAuth, validateSpot, async(req, res, next) => {
   const spot = await Spot.findByPk(spotId);
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       "message": "Spot couldn't be found"
     })
   };
 
   if (spot.ownerId === userId) {
     await spot.update(req.body);
-    res.json(spot);
+    return res.json(spot);
   } else {
-    res.status(403).json({
+    return res.status(403).json({
       "message": "Forbidden"
     })
   }
@@ -365,19 +365,19 @@ router.delete('/:id', requireAuth, async(req, res, next) => {
   const spot = await Spot.findByPk(spotId);
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       "message": "Spot couldn't be found"
     })
   }
 
   if (spot.ownerId === userId) {
     await spot.destroy();
-    res.json({
+    return res.json({
       "message": "Successfully deleted"
     })
 
   } else {
-    res.status(403).json({
+    return res.status(403).json({
       "message": "Forbidden"
     })
   }
@@ -391,7 +391,7 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
   const { user } = req;
   const spot = await Spot.findByPk(id);
 
-  if (!spot) res.status(404).json({"message": "Spot couldn't be found"});
+  if (!spot) return res.status(404).json({"message": "Spot couldn't be found"});
 
   if (user.id !== spot.ownerId) {
     return res.status(403).json({
@@ -409,7 +409,7 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
     attributes: ['id', 'url', 'preview']
   })
 
-  res.status(201).json(newImgInfo);
+  return res.status(201).json(newImgInfo);
 })
 
 
@@ -449,7 +449,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async(req, res, next) =
     userId
   })
 
-  res.status(201).json(newReview);
+  return res.status(201).json(newReview);
 });
 
 //get all bookings for a spot
@@ -461,7 +461,7 @@ router.get('/:id/bookings', requireAuth, async(req, res, next) => {
   const spot = await Spot.findByPk(id);
 
   if (!spot) {
-    res.status(404).json({
+    return res.status(404).json({
       "message": "Spot couldn't be found"
     })
   };
@@ -486,7 +486,7 @@ router.get('/:id/bookings', requireAuth, async(req, res, next) => {
     })
   };
 
-  res.json({
+  return res.json({
     "Bookings": booking
   })
 });
@@ -501,7 +501,7 @@ router.post('/:id/bookings', requireAuth, validateBooking, async(req, res, next)
   const userId = user.id;
 
   if (!spot) {
-    res.status(404).json(
+    return res.status(404).json(
       {
         "message": "Spot couldn't be found"
       }
