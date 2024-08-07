@@ -193,7 +193,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
     errors.endDate = "End date conflicts with an existing booking";
   }
 
-  if (errors) {
+  if (errors.length) {
     return res.status(403).json({
       message,
       errors
