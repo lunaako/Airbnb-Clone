@@ -80,32 +80,30 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookingStartConflict = await Booking.findOne({
     where: {
       spotId: spotId,
-      [Op.and]: [
+      [Op.or]: [
         {
           [Op.or]: [
             {
               startDate: newStartDate
             },
             {
-              [Op.and]: [
-                {
-                  startDate: {
-                    [Op.lt]: newStartDate
-                  }
-                },
-                {
-                  endDate: {
-                    [Op.gt]: newStartDate
-                  }
-                }
-              ]
+              endDate: newStartDate
             }
           ]
         },
         {
-          endDate: {
-            [Op.ne]: newStartDate
-          }
+          [Op.and]: [
+            {
+              startDate: {
+                [Op.lt]: newStartDate
+              }
+            },
+            {
+              endDate: {
+                [Op.gt]: newStartDate
+              }
+            }
+          ]
         }
       ]
     }
@@ -116,7 +114,14 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
       spotId: spotId,
       [Op.or]: [
         {
-          endDate: newEndDate
+          [Op.or]: [
+            {
+              startDate: newEndDate
+            },
+            {
+              endDate: newEndDate
+            }
+          ]
         },
         {
           [Op.and]: [
@@ -139,16 +144,34 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookingBothConflict = await Booking.findOne({
     where: {
       spotId: spotId,
-      [Op.and]: [
+      [Op.or]: [
         {
-          startDate: {
-            [Op.gt]: newStartDate
-          }
+          [Op.and]: [
+            {
+              startDate: {
+                [Op.gt]: newStartDate
+              }
+            },
+            {
+              endDate: {
+                [Op.lt]: newEndDate
+              }
+            }
+          ]
         },
         {
-          endDate: {
-            [Op.lt]: newEndDate
-          }
+          [Op.and]: [
+            {
+              startDate: {
+                [Op.lt]: newStartDate
+              }
+            },
+            {
+              endDate: {
+                [Op.gt]: newEndDate
+              }
+            }
+          ]
         }
       ]
     }
@@ -157,28 +180,25 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   let message = 'Sorry, this spot is already booked for the specified dates';
   let errors = {};
 
-  if (bookingStartConflict || bookingEndConflict || bookingBothConflict) {
+  if (bookingStartConflict) {
+    errors.startDate = "Start date conflicts with an existing booking";
+  }
 
-    if (bookingStartConflict && bookingEndConflict) {
-      errors.startDate = "Start date conflicts with an existing booking";
-      errors.endDate = "End date conflicts with an existing booking";
+  if (bookingEndConflict) {
+    errors.endDate = "End date conflicts with an existing booking";
+  }
 
-    } else if (bookingBothConflict) {
-      errors.startDate = "Start date conflicts with an existing booking";
-      errors.endDate = "End date conflicts with an existing booking";
+  if (bookingBothConflict) {
+    errors.startDate = "Start date conflicts with an existing booking";
+    errors.endDate = "End date conflicts with an existing booking";
+  }
 
-    } else if (bookingStartConflict) {
-      errors.startDate = "Start date conflicts with an existing booking";
-
-    } else if (bookingEndConflict) {
-      errors.endDate = "End date conflicts with an existing booking";
-    }
-
+  if (errors) {
     return res.status(403).json({
       message,
       errors
     })
-  };
+  }
 
   await thisBooking.update(req.body);
   return res.json(thisBooking);
