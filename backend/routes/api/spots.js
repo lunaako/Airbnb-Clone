@@ -82,11 +82,11 @@ const validateQuery = [
   check('minLng')
     .optional({ checkFalsy: true })
     .isFloat({ min: -180, max: 180})
-    .withMessage('Minimum longtitude is invalid'),
+    .withMessage('Minimum longitude is invalid'),
   check('maxLng')
     .optional({ checkFalsy: true })
     .isFloat({ min: -180, max: 180})
-    .withMessage('Maximum longtitude is invalid'),
+    .withMessage('Maximum longitude is invalid'),
   check('minPrice')
     .optional({ checkFalsy: true })
     .isFloat({ min: 0 })
