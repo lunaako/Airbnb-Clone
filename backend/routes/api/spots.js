@@ -98,6 +98,27 @@ const validateQuery = [
   handleValidationErrors
 ];
 
+const validateBooking = [
+  check('startDate')
+    .custom(async (value, { req }) => {
+      const startDate = new Date(value);
+      if (startDate < new Date()) {
+        throw new Error('startDate cannot be in the past');
+      }
+      return true;
+    }),
+  check('endDate')
+    .custom(async (value, { req }) => {
+      const startDate = new Date(req.body.startDate);
+      const endDate = new Date(value);
+      if (endDate <= startDate) {
+        throw new Error('endDate cannot be on or before startDate');
+      }
+      return true;
+    }),
+  handleValidationErrors
+];
+
 //get all spots
   // add avgRating and previewImg to response body when reviews table's created
 router.get('/', validateQuery, async (req, res)=> {
@@ -180,7 +201,7 @@ router.get('/:id/reviews', async(req, res, next) => {
       }
     )
   };
-  
+
   const reviews = await Review.findAll({
     where: { spotId },
     include: [{
@@ -236,7 +257,7 @@ router.put('/:id', requireAuth, validateSpot, async(req, res, next) => {
 
 });
 
-//delete a spot 
+//delete a spot
 router.delete('/:id', requireAuth, async(req, res, next) => {
   const { id: spotId } = req.params;
   const { user } = req;
@@ -254,13 +275,13 @@ router.delete('/:id', requireAuth, async(req, res, next) => {
     res.json({
       "message": "Successfully deleted"
     })
-    
+
   } else {
     res.status(403).json({
       "message": "Forbidden"
     })
   }
-  
+
 });
 
 //add an img to a spot based on spot id
@@ -366,7 +387,7 @@ router.get('/:id/bookings', requireAuth, async(req, res, next) => {
 });
 
 //create a booking from spot
-router.post('/:id/bookings', requireAuth, async(req, res, next) => {
+router.post('/:id/bookings', requireAuth, validateBooking, async(req, res, next) => {
   const { id } = req.params;
   const { user } = req;
   const { startDate, endDate } = req.body;
@@ -394,7 +415,7 @@ router.post('/:id/bookings', requireAuth, async(req, res, next) => {
     endDate
   });
 
-  res.status(201).json(newBooking);
+  return res.status(201).json(newBooking);
 })
 
 module.exports = router;
