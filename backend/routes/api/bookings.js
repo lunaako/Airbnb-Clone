@@ -75,19 +75,36 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
 
   const spotId = thisBooking.spotId;
   const { startDate, endDate } = req.body;
+  const newStartDate = new Date(startDate);
+  const newEndDate = new Date(endDate);
   const bookingStartConflict = await Booking.findAll({
     where: {
       spotId: spotId,
-
-      [Op.or]: [
+      [Op.and]: [
         {
-          startDate: {
-            [Op.gt]: startDate
-          }
+          [Op.or]: [
+            {
+              startDate: newStartDate
+            },
+            {
+              [Op.and]: [
+                {
+                  startDate: {
+                    [Op.lt]: newStartDate
+                  }
+                },
+                {
+                  endDate: {
+                    [Op.gt]: newStartDate
+                  }
+                }
+              ]
+            }
+          ]
         },
         {
           endDate: {
-            [Op.lt]: startDate
+            [Op.ne]: newStartDate
           }
         }
       ]
@@ -97,35 +114,94 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookingEndConflict = await Booking.findAll({
     where: {
       spotId: spotId,
-
-      [Op.and]: [
+      [Op.or]: [
         {
-          startDate: {
-            [Op.lte]: endDate
-          }
+          [Op.and]: [
+            {
+              endDate: {
+                [Op.gt]: endDate
+              }
+            },
+            {
+              startDate: {
+                [Op.lt]: endDate
+              }
+            }
+          ]
         },
         {
-          endDate: {
-            [Op.gte]: endDate
-          }
+          endDate: endDate
         }
       ]
     }
   });
 
+  // const bookingBothConflict = await Booking.findAll({
+  //   where: {
+  //     spotId: spotId,
+  //     [Op.or]: [
+  //       {
+  //         [Op.and]: [
+  //           {
+  //             startDate: {
+  //               [Op.gt]: startDate
+  //             }
+  //           },
+  //           {
+  //             endDate: {
+  //               [Op.lt]: endDate
+  //             }
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         [Op.and]: [
+  //           {
+  //             startDate: {
+  //               [Op.lt]: startDate
+  //             }
+  //           },
+  //           {
+  //             endDate: {
+  //               [Op.gt]: endDate
+  //             }
+  //           }
+  //         ]
+  //       }
+  //     ],
+  //     [Op.and]: [
+  //       {
+  //         [Op.not]: [
+  //           {
+  //             startDate: {
+  //               [Op.lt]: startDate
+  //             },
+  //             endDate: {
+  //               [Op.lt]: startDate
+  //             }
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // });
+
   let message = 'Sorry, this spot is already booked for the specified dates';
   let errors = {};
 
-  if (bookingStartConflict.length || bookingEndConflict.length) {
+  if (bookingStartConflict.length || bookingEndConflict.length || bookingBothConflict) {
 
     if (bookingStartConflict.length && bookingEndConflict.length) {
       errors.startDate = "Start date conflicts with an existing booking";
       errors.endDate = "End date conflicts with an existing booking";
 
+    // } else if (bookingBothConflict) {
+    //   errors.startDate = "Start date conflicts with an existing booking";
+
     } else if (bookingStartConflict.length) {
       errors.startDate = "Start date conflicts with an existing booking";
 
-    } else {
+    } else if (bookingEndConflict) {
       errors.endDate = "End date conflicts with an existing booking";
     }
 
