@@ -193,7 +193,6 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { user } = req;
   const {address, city, state, country, lat, lng, name, description, price} = req.body;
 
-  try{
     const id = user.id;
     const newSpot = await Spot.create({
       ownerId: id,
@@ -209,9 +208,6 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
     });
 
     res.status(201).json(newSpot);
-  } catch(err) {
-    return res.json({errors: err.errors});
-  }
 });
 
 //get all spots owned by the current user
