@@ -409,7 +409,11 @@ router.post('/:id/images', requireAuth, async(req, res, next) => {
     preview
   });
 
-  res.status(201).json(newImg);
+  const newImgInfo = await SpotImage.findByPk(newImg.id, {
+    attributes: ['id', 'url', 'preview']
+  })
+
+  res.status(201).json(newImgInfo);
 })
 
 
