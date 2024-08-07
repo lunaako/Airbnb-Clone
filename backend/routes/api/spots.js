@@ -284,7 +284,7 @@ router.get('/:id', async(req, res, next) => {
     };
 
     const spotWizRating = spot.toJSON();
-    spotWizRating.avgRating = avgRating;
+    spotWizRating.avgStarRating = avgRating;
     spotWizRating.numReviews = reviewCount;
 
     return res.json(spotWizRating);
