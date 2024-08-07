@@ -25,6 +25,15 @@ router.get('/current', requireAuth, async (req,res) => {
 
   if (user) {
     const currentUserId = user.id;
+
+    const previewImg = await SpotImage.findOne({
+      where: {
+        spotId: spot.id,
+        preview: true
+      },
+      attributes: ['url']
+    });
+    
     const reviews = await Review.findAll({
       where: {
         userId: currentUserId
