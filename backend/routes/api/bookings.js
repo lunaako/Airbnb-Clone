@@ -198,10 +198,10 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
       message,
       errors
     })
+  } else {
+    await thisBooking.update(req.body);
+    return res.json(thisBooking);
   }
-
-  await thisBooking.update(req.body);
-  return res.json(thisBooking);
 });
 
 router.delete('/:bookingId', requireAuth, async(req, res) => {
