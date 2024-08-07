@@ -144,8 +144,30 @@ router.get('/', validateQuery, async (req, res)=> {
     offset: size * (page - 1)
   });
 
+  const spotsWizRatings = [];
+
+  for (let spot of spots) {
+
+    const reviewCount = await Review.count({
+      where: {spotId: spot.id},
+    });
+
+    const totalStars = await Review.sum('stars', {
+      where: {spotId: spot.id}
+    });
+
+    let avgRating = totalStars / reviewCount;
+
+    if (!avgRating) {
+      avgRating = null;
+    };
+
+    const spotWizRating = spot.toJSON();
+    spotWizRating.avgRating = avgRating;
+    spotsWizRatings.push(spotWizRating);
+  };
   return res.json({
-    'Spots': spots,
+    'Spots': spotsWizRatings,
     'page': page,
     'size': size
   });
