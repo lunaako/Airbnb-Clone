@@ -46,11 +46,11 @@ module.exports = (sequelize, DataTypes) => {
         //     throw new Error('startDate cannot be in the past');
         //   }
         // },
-        isBeforeEndDate(value) {
-          if (value >= this.endDate) {
-            throw new Error('endDate cannot be on or before startDate');
-          }
-        }
+        // isBeforeEndDate(value) {
+        //   if (value >= this.endDate) {
+        //     throw new Error('endDate cannot be on or before startDate');
+        //   }
+        // }
       }
     },
     endDate: {
@@ -59,22 +59,22 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isDate: true,
         // isAfter: this.startDate,
-        isAfterStartDate(value) {
-          if (value <= this.startDate) {
-            throw new Error('endDate cannot be on or before startDate');
-          }
-        }
+        // isAfterStartDate(value) {
+        //   if (value <= this.startDate) {
+        //     throw new Error('endDate cannot be on or before startDate');
+        //   }
+        // }
       }
     }
   }, {
     sequelize,
     modelName: 'Booking',
-    indexes: [
-      {
-        unique: true,
-        fields: ['spotId', 'startDate']
-      }
-    ]
+    // indexes: [
+    //   {
+    //     unique: true,
+    //     fields: ['spotId', 'startDate']
+    //   }
+    // ]
   });
   return Booking;
 };
