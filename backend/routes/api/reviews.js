@@ -88,7 +88,29 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
       "message": "Review couldn't be found"
     });
   }
+})
 
+//add an img to a spot based on spot id
+router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
+  const { id } = req.params;
+  const { url, preview } = req.body;
+  const { user } = req;
+  const review = await Review.findByPk(id);
+
+  if (user.id !== review.ownerId) {
+    return res.status(403).json({
+      "message": "Forbidden"
+    })
+  };
+
+  if (!review) res.status(404).json({"message": "Review couldn't be found"});
+
+  const newImg = await review.createReviewImage({
+    url,
+    preview
+  });
+
+  res.status(201).json(newImg);
 })
 
 module.exports = router;
