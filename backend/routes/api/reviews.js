@@ -90,22 +90,23 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
   }
 })
 
-//add an img to a spot based on spot id
+//add an img to a review based on review id
 router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
-  const { id } = req.params;
+  const { reviewId } = req.params;
   const { url } = req.body;
   const { user } = req;
-  const review = await Review.findByPk(id);
+  const review = await Review.findByPk(reviewId);
 
-  if (user.id !== review.ownerId) {
+
+  if (!review) res.status(404).json({"message": "Review couldn't be found"});
+
+  if (user.id !== review.userId) {
     return res.status(403).json({
       "message": "Forbidden"
     })
   };
 
-  if (!review) res.status(404).json({"message": "Review couldn't be found"});
-
-  if (await ReviewImage.findAll({where: {reviewId: review.id}}).length > 10) {
+  if ((await ReviewImage.findAll({where: {reviewId: review.id}})).length > 10) {
     return res.status(403).json({
       "message": "Maximum number of images for this resource was reached"
     })
