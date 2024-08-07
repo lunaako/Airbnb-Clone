@@ -64,35 +64,35 @@ handleValidationErrors
 
 const validateQuery = [
   check('page')
-    .optional()
+    .optional({ checkFalsy: true })
     .isInt({ min: 1})
     .withMessage('Page must be greater than or equal to 1'),
   check('size')
-    .optional()
+    .optional({ checkFalsy: true })
     .isInt({ min: 1, max: 20})
     .withMessage('Size must be between 1 and 20'),
   check('minLat')
-    .optional()
+    .optional({ checkFalsy: true })
     .isFloat({ min: -90, max: 90})
     .withMessage('Minimum latitude is invalid'),
   check('maxLat')
-    .optional()
+    .optional({ checkFalsy: true })
     .isFloat({ min: -90, max: 90})
     .withMessage('Maximum latitude is invalid'),
   check('minLng')
-    .optional()
+    .optional({ checkFalsy: true })
     .isFloat({ min: -180, max: 180})
     .withMessage('Minimum longtitude is invalid'),
   check('maxLng')
-    .optional()
+    .optional({ checkFalsy: true })
     .isFloat({ min: -180, max: 180})
     .withMessage('Maximum longtitude is invalid'),
   check('minPrice')
-    .optional()
+    .optional({ checkFalsy: true })
     .isFloat({ min: 0 })
     .withMessage('Minimum price must be greater than or equal to 0'),
   check('maxPrice')
-    .optional()
+    .optional({ checkFalsy: true })
     .isFloat({ min: 0 })
     .withMessage('Maximum price must be greater than or equal to 0'),
   handleValidationErrors
@@ -103,8 +103,8 @@ const validateQuery = [
 router.get('/', validateQuery, async (req, res)=> {
   let { page=1, size=20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
 
-  page = +page;
-  size = +size;
+  page = +page || 1;
+  size = +size || 20;
 
   let where = {};
 
