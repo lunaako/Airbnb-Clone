@@ -553,10 +553,10 @@ router.post('/:id/bookings', requireAuth, validateBooking, async(req, res, next)
   let errors = {};
 
   for (let booking of bookings) {
-    if (newStartDate >= booking.startDate && newStartDate < booking.endDate) {
+    if (newStartDate >= booking.startDate && newStartDate <= booking.endDate) {
       errors.startDate = "Start date conflicts with an existing booking";
     }
-    if (newEndDate > booking.startDate && newEndDate <= booking.endDate) {
+    if (newEndDate >= booking.startDate && newEndDate <= booking.endDate) {
       errors.endDate = "End date conflicts with an existing booking";
     }
     if (newStartDate < booking.startDate && newEndDate > booking.endDate) {
