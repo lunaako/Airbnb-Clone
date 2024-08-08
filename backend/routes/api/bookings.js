@@ -80,6 +80,9 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookingStartConflict = await Booking.findOne({
     where: {
       spotId: spotId,
+      userId: {
+        [Op.ne]: user.Id
+      },
       [Op.or]: [
         {
           [Op.or]: [
@@ -112,6 +115,9 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookingEndConflict = await Booking.findOne({
     where: {
       spotId: spotId,
+      userId: {
+        [Op.ne]: user.Id
+      },
       [Op.or]: [
         {
           [Op.or]: [
@@ -144,6 +150,9 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookingBothConflict = await Booking.findOne({
     where: {
       spotId: spotId,
+      userId: {
+        [Op.ne]: user.Id
+      },
       // [Op.or]: [
       //   {
           [Op.and]: [ // newStart < startDate < endDate < newEnd
@@ -193,6 +202,23 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   if (bookingStartConflict && bookingEndConflict) {
     errors.startDate = "Start date conflicts with an existing booking";
     errors.endDate = "End date conflicts with an existing booking";
+  }
+
+  if (newStartDate > thisBooking.startDate && newEndDate > thisBooking.endDate) {
+    await thisBooking.update(req.body);
+    return res.json(thisBooking);
+  }
+  if (newStartDate === thisBooking.startDate && newEndDate > thisBooking.endDate) {
+    await thisBooking.update(req.body);
+    return res.json(thisBooking);
+  }
+  if (newStartDate > thisBooking.startDate && newEndDate === thisBooking.endDate) {
+    await thisBooking.update(req.body);
+    return res.json(thisBooking);
+  }
+  if (newStartDate === thisBooking.startDate && newEndDate === thisBooking.endDate) {
+    await thisBooking.update(req.body);
+    return res.json(thisBooking);
   }
 
   if (!errors.startDate && !errors.endDate) {
