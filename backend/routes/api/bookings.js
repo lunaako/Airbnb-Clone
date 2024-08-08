@@ -104,7 +104,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
               }
             }
           ]
-        }
+        },
       ]
     }
   });
@@ -160,7 +160,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
           ]
       //   },
       //   {
-      //     [Op.and]: [
+      //     [Op.and]: [ // startDate < newStart < newEnd < endDate
       //       {
       //         startDate: newStartDate
       //       },
@@ -181,6 +181,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   }
 
   if (bookingEndConflict) {
+    errors.startDate = undefined;
     errors.endDate = "End date conflicts with an existing booking";
   }
 
@@ -189,10 +190,10 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
     errors.endDate = "End date conflicts with an existing booking";
   }
 
-  // if (bookingStartConflict && bookingEndConflict) {
-  //   errors.startDate = "Start date conflicts with an existing booking";
-  //   errors.endDate = "End date conflicts with an existing booking";
-  // }
+  if (bookingStartConflict && bookingEndConflict) {
+    errors.startDate = "Start date conflicts with an existing booking";
+    errors.endDate = "End date conflicts with an existing booking";
+  }
 
   if (!errors.startDate && !errors.endDate) {
     await thisBooking.update(req.body);
