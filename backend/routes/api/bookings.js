@@ -97,61 +97,32 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const newStartDate = new Date(startDate);
   const newEndDate = new Date(endDate);
 
-  const bookingStartConflict = await Booking.findOne({
+  const bookings = await Booking.findAll({
     where: {
       spotId: spotId,
-      userId: {
-        [Op.ne]: user.id
-      },
       [Op.or]: [
-        { startDate: newStartDate },
-        { endDate: newStartDate },
         {
-          [Op.and]: [
-            { startDate: { [Op.lt]: newStartDate } },
-            { endDate: { [Op.gt]: newStartDate } }
-          ]
+          startDate: {
+            [Op.between]: [newStartDate, newEndDate]
+          }
         },
-      ]
-    }
-  });
-
-  const bookingEndConflict = await Booking.findOne({
-    where: {
-      spotId: spotId,
-      userId: {
-        [Op.ne]: user.id
-      },
-      [Op.or]: [
-        { startDate: newEndDate },
-        { endDate: newEndDate },
         {
-          [Op.and]: [
-            { startDate: { [Op.lt]: newEndDate } },
-            { endDate: { [Op.gt]: newEndDate } }
-          ]
-        },
-      ]
-    }
-  });
-
-  const bookingBothConflict = await Booking.findOne({
-    where: {
-      spotId: spotId,
-      userId: {
-        [Op.ne]: user.id
-      },
-      [Op.or]: [
-        {
-          [Op.and]: [
-            { startDate: { [Op.gt]: newStartDate } },
-            { endDate: { [Op.lt]: newEndDate } }
-          ]
+          endDate: {
+            [Op.between]: [newStartDate, newEndDate]
+          }
         },
         {
           [Op.and]: [
-            { startDate: { [Op.lt]: newStartDate } },
-            { endDate: { [Op.gt]: newEndDate } }
+            {
+              startDate: {
+                [Op.lte]: newStartDate
+              }
+            },
+            {
+              endDate: {
+                [Op.gte]: newEndDate
+              }
+            }
           ]
         }
       ]
@@ -160,20 +131,17 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
 
   let errors = {};
 
-  if (bookingStartConflict) {
-    errors.startDate = "Start date conflicts with an existing booking";
-  }
-
-  if (bookingEndConflict) {
-    // Only set endDate error if no startDate error was set
-    // if (!errors.startDate) {
+  for (let booking of bookings) {
+    if (newStartDate >= booking.startDate && newStartDate <= booking.endDate) {
+      errors.startDate = "Start date conflicts with an existing booking";
+    }
+    if (newEndDate >= booking.startDate && newEndDate <= booking.endDate) {
       errors.endDate = "End date conflicts with an existing booking";
-    // }
-  }
-
-  if (bookingBothConflict) {
-    errors.startDate = "Start date conflicts with an existing booking";
-    errors.endDate = "End date conflicts with an existing booking";
+    }
+    if (newStartDate < booking.startDate && newEndDate > booking.endDate) {
+      errors.startDate = "Start date conflicts with an existing booking";
+      errors.endDate = "End date conflicts with an existing booking";
+    }
   }
 
   if (Object.keys(errors).length) {
