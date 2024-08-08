@@ -57,10 +57,8 @@ router.get('/current', requireAuth, async (req,res) => {
       })
 
       const reviewPlus = review.toJSON();
-      // const spotPlus = spot.toJSON();
       const spotPlus = reviewPlus.Spot
       if (previewImg) spotPlus.previewImage = previewImg.url;
-      // reviewsPlus.push(spotPlus)
 
       reviewsPlus.push(reviewPlus);
     }
