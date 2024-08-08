@@ -118,14 +118,14 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
     })
   };
 
-  if ((await ReviewImage.findAll({where: {reviewId: review.id}})).length > 10) {
+  if ((await ReviewImage.findAll({where: {reviewId: review.id}})).length < 10) {
+    const newImg = await review.createReviewImage({url});
+    return res.status(201).json(newImg);
+  } else {
     return res.status(403).json({
       "message": "Maximum number of images for this resource was reached"
     })
   }
-
-  const newImg = await review.createReviewImage({url});
-  return res.status(201).json(newImg);
 })
 
 module.exports = router;
