@@ -5,7 +5,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
-const { Booking, Spot } = require('../../db/models');
+const { Booking, Spot, SpotImage } = require('../../db/models');
 
 const router = express.Router();
 
@@ -46,7 +46,26 @@ router.get('/current', requireAuth, async (req,res) => {
           exclude: ['createdAt', 'updatedAt', 'description']
         }
       }]})
-    return res.json({'Bookings': bookings});
+
+    const bookingsPlus = [];
+    for (let booking of bookings) {
+      let spot = booking.Spot
+
+      const previewImg = await SpotImage.findOne({
+        where: {
+          spotId: spot.id,
+          preview: true
+        },
+        attributes: ['url']
+      })
+
+      const bookingPlus = booking.toJSON();
+      const spotPlus = bookingPlus.Spot
+      if (previewImg) spotPlus.previewImage = previewImg.url;
+
+      bookingsPlus.push(bookingPlus);
+    }
+    return res.json({'Bookings': bookingsPlus});
   }
 });
 

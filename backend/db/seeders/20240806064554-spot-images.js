@@ -13,25 +13,25 @@ const spotImages = [
   {
     spotId: 2,
     url: 'https://example2.com/image2.jpg',
-    preview: false, 
+    preview: true,
   },
 
   {
     spotId: 3,
     url: 'https://example3.com/image3.jpg',
-    preview: false, 
+    preview: true,
   },
 
   {
     spotId: 4,
     url: 'https://example4.com/image4.jpg',
-    preview: false, 
+    preview: true,
   },
 
   {
     spotId: 5,
     url: 'https://example5.com/image5.jpg',
-    preview: true, 
+    preview: true,
   },
 ]
 
