@@ -100,6 +100,9 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res)=> {
   const bookings = await Booking.findAll({
     where: {
       spotId: spotId,
+      userId: {
+        [Op.ne]: user.id
+      },
       [Op.or]: [
         {
           startDate: {
