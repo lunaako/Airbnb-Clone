@@ -34,13 +34,14 @@ router.get('/current', requireAuth, async (req,res) => {
         model: User,
         attributes: ['id', 'firstName', 'lastName']
       }, {
-        model: ReviewImage,
-        attributes: ['id', 'url']
-      },{
         model: Spot,
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'description']
         }
+      },
+      {
+        model: ReviewImage,
+        attributes: ['id', 'url']
       }]})
 
     const reviewsPlus = [];
@@ -55,11 +56,13 @@ router.get('/current', requireAuth, async (req,res) => {
         attributes: ['url']
       })
 
+      const reviewPlus = review.toJSON();
       // const spotPlus = spot.toJSON();
-      // if (previewImg) spotPlus.previewImage = previewImg.url;
+      const spotPlus = reviewPlus.Spot
+      if (previewImg) spotPlus.previewImage = previewImg.url;
       // reviewsPlus.push(spotPlus)
-      if (previewImg) spot.previewImage = previewImg.url;
-      reviewsPlus.push(review);
+
+      reviewsPlus.push(reviewPlus);
     }
 
     return res.json({'Reviews': reviewsPlus});
