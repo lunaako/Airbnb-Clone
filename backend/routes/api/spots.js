@@ -215,7 +215,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
   const { user } = req;
   const ownerId = user.id;
 
-  const spots = await Spot.findAll({where: ownerId});
+  const spots = await Spot.findAll({where: {ownerId}});
 
   const spotsWizRatings = [];
   for (let spot of spots) {
