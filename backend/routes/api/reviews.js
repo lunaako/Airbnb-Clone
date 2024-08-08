@@ -5,7 +5,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
-const { Review, User, Spot, ReviewImage } = require('../../db/models');
+const { Review, User, Spot, ReviewImage, SpotImage } = require('../../db/models');
 
 const router = express.Router();
 
@@ -43,18 +43,26 @@ router.get('/current', requireAuth, async (req,res) => {
         }
       }]})
 
-    const previewImg = await SpotImage.findOne({
-      where: {
-        spotId
-      }
-    })
-
+    const reviewsPlus = [];
     for (let review of reviews) {
-      for (let spot in review.Spot) {
-        spot.previewImage = previewImg
-      }
+      let spot = review.Spot
+
+      const previewImg = await SpotImage.findOne({
+        where: {
+          spotId: spot.id,
+          preview: true
+        },
+        attributes: ['url']
+      })
+
+      // const spotPlus = spot.toJSON();
+      // if (previewImg) spotPlus.previewImage = previewImg.url;
+      // reviewsPlus.push(spotPlus)
+      if (previewImg) spot.previewImage = previewImg.url;
+      reviewsPlus.push(review);
     }
-    return res.json({'Reviews': reviews});
+
+    return res.json({'Reviews': reviewsPlus});
   }
 });
 
