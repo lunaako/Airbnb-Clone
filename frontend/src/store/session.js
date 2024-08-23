@@ -1,64 +1,47 @@
-//?This file will contain all the actions specific to the session user's information and the session user's Redux reducer
+import { csrfFetch } from './csrf';
 
-import { csrfFetch } from "./csrf";
+const SET_USER = "session/setUser";
+const REMOVE_USER = "session/removeUser";
 
-const LOGIN_USER = 'session/login';
-const REMOVE_USER = 'session/remove';
-
-//!action creator ----> set the user in the session state
-export function loginUser(user) {
+const setUser = (user) => {
   return {
-    type: LOGIN_USER,
+    type: SET_USER,
     payload: user
-  }
-}
+  };
+};
 
-//!action creator ----> remove the user in the session state
-export function removeUser() {
+const removeUser = () => {
   return {
-    type: REMOVE_USER,
-  }
-}
+    type: REMOVE_USER
+  };
+};
 
-//!thunk action creator ---> set user in session from backend
-export const loginUserThunk = (credential, password) => async dispatch => {
-  const res = await csrfFetch('/api/session', {
-    method: 'POST',
+//!thunk action creator ---> login user(Post api/session router)
+export const login = (user) => async (dispatch) => {
+  const { credential, password } = user;
+  const response = await csrfFetch("/api/session", {
+    method: "POST",
     body: JSON.stringify({
       credential,
       password
     })
   });
+  const data = await response.json();
+  dispatch(setUser(data.user));
+  return response;
+};
 
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(loginUser(data.user));
-  } else {
-    const err = await res.json();
-    return err;
-  }
-}
+const initialState = { user: null };
 
-const initialState = { user: null }
-
-function sessionReducer(state=initialState, action) {
-  switch(action.type) {
-    case LOGIN_USER: {
-      const newState = {
-        ...state,
-        user: action.payload
-      }
-
-      return newState;
-    }
-
-    case REMOVE_USER: {
-      return initialState;
-    }
-
+const sessionReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case SET_USER:
+      return { ...state, user: action.payload };
+    case REMOVE_USER:
+      return { ...state, user: null };
     default:
       return state;
   }
-}
+};
 
 export default sessionReducer;
