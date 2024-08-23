@@ -44,17 +44,17 @@ router.post(
   async (req, res) => {
     const { email, password, username, firstName, lastName } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
-    const isEmailExisted = await User.findAll({where: {email}});
-    const isUsernameExisted = await User.findAll({where: {username}});
+    const isEmailExisted = await User.findOne({where: {email}});
+    const isUsernameExisted = await User.findOne({where: {username}});
 
-    if (isEmailExisted.length || isUsernameExisted.length) {
+    if (isEmailExisted || isUsernameExisted) {
       const errs = {};
 
-      if (isEmailExisted.length) {
+      if (isEmailExisted) {
         errs.email = "User with that email already exists"
       };
 
-      if (isUsernameExisted.length) {
+      if (isUsernameExisted) {
         errs.username = "User with that username already exists"
       };
 
