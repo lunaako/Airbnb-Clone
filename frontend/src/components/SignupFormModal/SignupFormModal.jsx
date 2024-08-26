@@ -31,9 +31,11 @@ function SignupFormModal() {
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
+          console.log(data)
           if (data?.errors) {
             setErrors(data.errors);
           }
+
         });
     }
     return setErrors({
@@ -62,7 +64,12 @@ function SignupFormModal() {
 
       {errors.email && <p style={{textAlign: 'center', color: 'red'}}>{errors.email}</p>}
       {errors.username && <p style={{textAlign: 'center', color: 'red'}}>{errors.username}</p>}
-
+      {errors.firstName && <p style={{textAlign: 'center', color: 'red'}}>{errors.firstName}</p>}
+      {errors.lastName && <p style={{textAlign: 'center', color: 'red'}}>{errors.lastName}</p>}
+      {errors.password && <p style={{textAlign: 'center', color: 'red'}}>{errors.password}</p>}
+      {errors.confirmPassword && (
+          <p style={{textAlign: 'center', color: 'red'}}>{errors.confirmPassword}</p>
+        )}
 
       <form onSubmit={handleSubmit}>
         <label>
@@ -92,7 +99,6 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
         <label>
           Last Name
           <input
@@ -102,7 +108,6 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
         <label>
           Password
           <input
@@ -112,7 +117,6 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
         <label>
           Confirm Password
           <input
@@ -122,9 +126,7 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
-        )}
+
         <button 
           disabled = {isDisabled()}
           type="submit"
