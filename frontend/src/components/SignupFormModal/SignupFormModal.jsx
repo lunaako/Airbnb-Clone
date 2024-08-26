@@ -41,9 +41,29 @@ function SignupFormModal() {
     });
   };
 
+  const isDisabled = () => {
+    const checkPassword = password.length >= 6;
+    const checkUsername = username.length >= 4;
+    const checkFirstName = firstName.length;
+    const checkLastName = lastName.length;
+    const checkEmail = email.length;
+    const checkConfirmPassword = confirmPassword.length >= 6;
+    return !(checkPassword 
+            && checkConfirmPassword 
+            && checkEmail 
+            && checkFirstName 
+            && checkLastName 
+            && checkUsername)
+  }
+
   return (
     <>
-      <h1>Sign Up</h1>
+      <h1 id='signup-title'>Sign Up</h1>
+
+      {errors.email && <p style={{textAlign: 'center', color: 'red'}}>{errors.email}</p>}
+      {errors.username && <p style={{textAlign: 'center', color: 'red'}}>{errors.username}</p>}
+
+
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -54,7 +74,6 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
         <label>
           Username
           <input
@@ -64,7 +83,6 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
         <label>
           First Name
           <input
@@ -107,7 +125,10 @@ function SignupFormModal() {
         {errors.confirmPassword && (
           <p>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+        <button 
+          disabled = {isDisabled()}
+          type="submit"
+        >Sign Up</button>
       </form>
     </>
   );

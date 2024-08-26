@@ -28,7 +28,12 @@ function LoginFormModal() {
 
   return (
     <>
-      <h1>Log In</h1>
+      <h1 id='login-title'>Log In</h1>
+
+      {errors.credential && (
+          <p style={{color: 'red', textAlign: 'center'}}>{errors.credential}</p>
+        )}
+
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email
@@ -39,6 +44,7 @@ function LoginFormModal() {
             required
           />
         </label>
+
         <label>
           Password
           <input
@@ -48,13 +54,18 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
+
         <button 
           disabled = {credential.length < 4 || password.length < 6}
-          type="submit">Log In</button>
+          type="submit"
+          id='login-button'
+        >Log In</button>
       </form>
+
+      <button
+        onClick={() => dispatch(sessionActions.login({'credential': 'Demo-lition', 'password': 'password'})).then(closeModal)}
+        id='demo-user-login'
+      >Demo User</button>
     </>
   );
 }
