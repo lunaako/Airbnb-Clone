@@ -32,7 +32,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <SpotsIndex />
+        element: <SpotsIndex />,
+        children: [
+          {
+            
+          }
+        ]
       }
     ]
   }

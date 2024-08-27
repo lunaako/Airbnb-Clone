@@ -2,7 +2,7 @@ import './SpotsIndex.css';
 
 
 export default function SpotsGrid({spot}) {
-  const { city, state, price, avgRating, previewImage } = spot;
+  const { city, state, price, avgRating, previewImage, name } = spot;
   // console.log(city);
 
   return (
@@ -20,6 +20,10 @@ export default function SpotsGrid({spot}) {
         </div>
 
         <p><strong>${price}</strong> night</p>
+      </div>
+
+      <div className='tooltip'>
+        {name}
       </div>
 
     </div>
