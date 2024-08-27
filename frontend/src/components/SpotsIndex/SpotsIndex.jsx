@@ -5,7 +5,8 @@ import './SpotsIndex.css';
 
 export default function SpotsIndex() {
   const spotsObj = useSelector(state => state.spots);
-  const spotsArr = spotsObj.Spots;
+  const spotsArr = Object.values(spotsObj).filter(spot => typeof spot === 'object');
+
   // console.log(spotsArr);
 
 

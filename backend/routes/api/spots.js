@@ -303,7 +303,7 @@ router.get('/:id/reviews', async(req, res, next) => {
   });
 })
 
-//get details of a spot from an id
+//!get details of a spot from an id
 router.get('/:id', async(req, res, next) => {
   const { id } = req.params
   const spot = await Spot.findByPk(id, {
