@@ -1,12 +1,17 @@
+import { useNavigate } from 'react-router-dom';
 import './SpotsIndex.css';
 
 
 export default function SpotsGrid({spot}) {
-  const { city, state, price, avgRating, previewImage, name } = spot;
+  const { id, city, state, price, avgRating, previewImage, name } = spot;
+  const navigate = useNavigate();
   // console.log(city);
 
   return (
-    <div className="listing-item">
+    <div 
+      className="listing-item"
+      onClick={() => navigate(`/spots/${id}`)}
+    >
 
       <div className="img-container">
         <img src={previewImage} alt='spot image'/>
