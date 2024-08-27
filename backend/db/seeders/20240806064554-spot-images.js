@@ -6,31 +6,31 @@ const { SpotImage } = require('../models');
 const spotImages = [
   {
     spotId: 1,
-    url: 'https://example1.com/image1.jpg',
+    url: 'https://www.tennessean.com/gcdn/presto/2022/11/08/PNAS/96d8c217-8161-427a-849f-d37284d3cb1d-Suites_Side.jpg?width=1320&height=744&fit=crop&format=pjpg&auto=webp',
     preview: true,
   },
 
   {
     spotId: 2,
-    url: 'https://example2.com/image2.jpg',
+    url: 'https://www.lvdoghotel.com/wp-content/uploads/2023/05/6810-W-Sahara-Ave-41-scaled.jpg',
     preview: true,
   },
 
   {
     spotId: 3,
-    url: 'https://example3.com/image3.jpg',
+    url: 'https://d367pvje6v6lu5.cloudfront.net/pictures/images/000/029/301/big_slider_pic/1.jpg?1629799514',
     preview: true,
   },
 
   {
     spotId: 4,
-    url: 'https://example4.com/image4.jpg',
+    url: 'https://www.truckeetahoepetlodge.com/wp-content/uploads/2020/09/dog-boarding-image-4.jpg.webp',
     preview: true,
   },
 
   {
     spotId: 5,
-    url: 'https://example5.com/image5.jpg',
+    url: 'https://static.bangkokpost.com/media/content/dcx/2022/01/21/4206407.jpg',
     preview: true,
   },
 ]

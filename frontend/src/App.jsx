@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import SpotsIndex from './components/SpotsIndex';
+import { getAllSpotsThunk } from './store/spots';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ function Layout() {
     dispatch(sessionActions.restoreUser()).then(() => {
       setIsLoaded(true)
     });
+
+    dispatch(getAllSpotsThunk());
   }, [dispatch]);
 
   return (

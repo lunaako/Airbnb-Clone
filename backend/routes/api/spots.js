@@ -119,7 +119,7 @@ const validateBooking = [
   handleValidationErrors
 ];
 
-//get all spots
+//!get all spots
   // add avgRating and previewImg to response body when reviews table's created
 router.get('/', validateQuery, async (req, res)=> {
   let { page=1, size=20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;

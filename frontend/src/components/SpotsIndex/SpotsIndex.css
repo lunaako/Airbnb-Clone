@@ -1,0 +1,79 @@
+.spots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  gap: 16px;
+  padding: 16px;
+}
+
+
+
+/* 当屏幕宽度小于 600px 时，强制为 1 列 */
+@media (max-width: 600px) {
+  .spots-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 当屏幕宽度在 600px 到 900px 之间时，使用 2 列 */
+@media (min-width: 600px) and (max-width: 900px) {
+  .spots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 当屏幕宽度在 900px 到 1200px 之间时，使用 3 列 */
+@media (min-width: 900px) and (max-width: 1200px) {
+  .spots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 当屏幕宽度大于 1200px 时，使用 4 列 */
+@media (min-width: 1200px) {
+  .spots-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.listing-item {
+  padding: 8px;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%; 
+}
+
+.img-container {
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; 
+  position: relative;
+}
+
+.img-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  border-radius: 8px;
+}
+
+.spots-details {
+  margin-top: 8px;
+  text-align: left; 
+}
+
+.location-rating {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+}
+
+.location-rating p {
+  margin: 0; 
+}
+
+.location-rating span {
+  margin-left: auto;
+}
