@@ -5,6 +5,7 @@ import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import SpotsIndex from './components/SpotsIndex';
 import { getAllSpotsThunk } from './store/spots';
+import SpotDetails from './components/SpotDetails/SpotDetails';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -33,11 +34,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <SpotsIndex />,
-        children: [
-          {
-            
-          }
-        ]
+      },
+      {
+        path: 'spots/:id',
+        element: <SpotDetails />
       }
     ]
   }
