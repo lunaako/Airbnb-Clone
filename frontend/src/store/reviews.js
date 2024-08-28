@@ -27,7 +27,7 @@ const reviewsReducer = (state={}, action) => {
       let newState = {};
       const reviews = action.payload.Reviews;
       reviews.forEach(review => {
-        newState[review.spotId] = review;
+        newState[review.id] = review;
       })
       return newState;
     }

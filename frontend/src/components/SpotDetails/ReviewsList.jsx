@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import dateTransform, { sortReviews } from "../../utils/date";
 
-export default function ReviewsList({ spotId, reviewCount, avgStarRating }) {
+export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerId }) {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const currUser = useSelector(state => state.session);
 
   useEffect(() => {
     dispatch(getReviewsThunk(spotId)).then(() => {
@@ -15,13 +16,18 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating }) {
     })
   }, [dispatch, spotId])
 
+
   const reviews = useSelector(state => state.reviews);
   const reviewArr = Object.values(reviews);
 
   //!sort the reviews from latest to oldest
-  sortReviews(reviewArr);
+  // sortReviews(reviewArr);
 
-  // console.log(reviewArr)
+  const reviewV2 = !reviewArr.length 
+                && currUser.user !== null 
+                && ownerId !== currUser.user.id;
+
+  console.log(reviews);
   
   return (
     <div className="spot-review-block">
@@ -33,7 +39,9 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating }) {
       </div>
 
       
-      {isLoaded && 
+      {
+        isLoaded && 
+        !!reviewArr.length &&
         <div className="review-detail">
         {
           reviewArr.map(review => (
@@ -44,7 +52,15 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating }) {
             </div>
           ))
         }
-      </div>}
+      </div>
+      }
+
+      {
+        reviewV2 &&
+        <div className="no-review-alter">
+          <p>Be the first to post a review!</p>
+        </div>
+      }
 
     </div>
   )

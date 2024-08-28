@@ -25,18 +25,19 @@ export default function SpotDetails() {
     )
   }
 
-  const { Owner: { firstName, lastName }, SpotImages, avgStarRating, city, state, country, name, description, price, numReviews } = spot;
+  const { Owner: { firstName, lastName, id: ownerId }, SpotImages, avgStarRating, city, state, country, name, description, price, numReviews } = spot;
 
+  
   let reviews;
   if (numReviews === 0) {
-    reviews = '';
+    reviews = null;
   } else if (numReviews === 1) {
-    reviews = '· 1 Reviews';
+    reviews = '· 1 Review';
   } else if (numReviews > 1) {
     reviews = `· ${numReviews} Reviews`
   }
 
-  // console.log(mainImg)
+  // console.log(ownerId)
   return (
     <div className="detail-spot-header">
 
@@ -103,7 +104,11 @@ export default function SpotDetails() {
 
       <div className="spot-detail-line"></div>
 
-      <ReviewsList spotId={id} reviewCount={reviews} avgStarRating={avgStarRating} />
+      <ReviewsList 
+      spotId={id} 
+      reviewCount={reviews} 
+      avgStarRating={avgStarRating} 
+      ownerId={ownerId} />
     </div>
   )
 }

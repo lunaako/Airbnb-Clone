@@ -5,16 +5,10 @@
 const {Review} = require('../models');
 const reviews = [
   {
-    "userId": 1,
+    "userId": 2,
     "spotId": 1,
     "review": "This was an awesome spot!",
     "stars": 5
-  },
-  {
-    "userId": 2,
-    "spotId": 2,
-    "review": "Great experience, highly recommend.",
-    "stars": 4
   },
   {
     "userId": 3,
@@ -33,7 +27,13 @@ const reviews = [
     "spotId": 5,
     "review": "Terrible experience, will not return.",
     "stars": 1
-  }
+  },
+  {
+    "userId": 2,
+    "spotId": 1,
+    "review": "sooo good!",
+    "stars": 2
+  },
 ]
 
 module.exports = {
