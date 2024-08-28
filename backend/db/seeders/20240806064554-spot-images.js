@@ -33,6 +33,24 @@ const spotImages = [
     url: 'https://static.bangkokpost.com/media/content/dcx/2022/01/21/4206407.jpg',
     preview: true,
   },
+
+  {
+    spotId: 1,
+    url: 'https://www.veryimportantpaws.com/wp-content/uploads/2023/11/Overview-of-Modern-Dog-Hotels.webp',
+    preview: false,
+  },
+
+  {
+    spotId: 1,
+    url: 'https://static01.nyt.com/images/2024/03/17/magazine/17mag-dog/17mag-dog-superJumbo.jpg?quality=75&auto=webp',
+    preview: false,
+  },
+
+  {
+    spotId: 1,
+    url: 'https://www.wagatlanta.com/uploads/5/0/7/7/50777777/6614e6ce-7586-4e72-aee0-9634e03746bb-1-201-a_orig.jpeg',
+    preview: false,
+  },
 ]
 
 

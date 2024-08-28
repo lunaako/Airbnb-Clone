@@ -1,0 +1,124 @@
+.detail-img-container {
+  display: grid;
+  grid-template-areas:
+    "main main side1 side2"
+    "main main side3 side4";
+  grid-template-columns: repeat(2, 1fr) repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 100%;
+  /* 设置高度 */
+}
+
+.detail-img-container img {
+  /* position: relative; */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4/3;
+}
+
+.img.main {
+  grid-area: main;
+}
+
+.img.side1 {
+  grid-area: side1;
+}
+
+.img.side2 {
+  grid-area: side2;
+}
+
+.img.side3 {
+  grid-area: side3;
+}
+
+.img.side4 {
+  grid-area: side4;
+}
+
+.spots-lower-info {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  margin-left: 5%;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Description Section */
+.detail-spot-description {
+  margin-bottom: 30px;
+  width: 50%;
+}
+
+
+.detail-spot-description p {
+  font-size: larger;
+}
+
+.detail-right-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 8px;
+  width: 30%;
+  height: 100px;
+  gap: 20px;
+}
+
+.detail-price-review-rating {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  gap:10%;
+}
+
+.detail-price-review-rating p {
+  font-weight: bold;
+  margin: 0;
+  width: 45%;
+}
+
+.price-night {
+  color: black;
+  font-weight: lighter;
+}
+
+.avg-reviews {
+  font-size: 1.2rem;
+  margin-left: 10px;
+  width: 45%;
+  text-align: end;
+}
+
+/* Reserve Button */
+.detail-right-info button {
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.detail-other-info button:hover {
+  background-color: #e14b4e;
+}
+
+.spot-header {
+  margin-left: 5%;
+}
+
+.spot-header p {
+  font-size: larger;
+}
