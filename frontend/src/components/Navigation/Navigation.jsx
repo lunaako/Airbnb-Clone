@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
@@ -6,6 +6,8 @@ import navLogo from '../../images/nav-logo.jpg';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
+  const isSessionUser = sessionUser!== null;
+  const navigate = useNavigate();
 
   return (
     <>
@@ -16,6 +18,19 @@ function Navigation({ isLoaded }) {
             <span>WoofBnB</span>
           </NavLink>
         </li>
+
+        {isSessionUser &&(
+            <li>
+              <button
+                className='navbar-create-spot'
+                onClick={() => navigate('/spots/new')}
+              >
+                Create a New Spot
+              </button>
+            </li>
+          )}
+
+
         {isLoaded && (
           <li className='nav-link'>
             <ProfileButton user={sessionUser} />

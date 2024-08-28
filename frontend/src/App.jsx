@@ -6,6 +6,7 @@ import * as sessionActions from './store/session';
 import SpotsIndex from './components/SpotsIndex';
 import { getAllSpotsThunk } from './store/spots';
 import SpotDetails from './components/SpotDetails/SpotDetails';
+import SpotForm from './components/SpotForm/SpotForm';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -36,8 +37,12 @@ const router = createBrowserRouter([
         element: <SpotsIndex />,
       },
       {
-        path: 'spots/:id',
-        element: <SpotDetails />
+        path: 'spots',
+        children: [
+          { path: ':id', element: <SpotDetails /> },
+          {path: 'new', element: <SpotForm />}
+        ]
+
       }
     ]
   }
