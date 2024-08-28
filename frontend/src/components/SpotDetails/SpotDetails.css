@@ -122,3 +122,8 @@
 .spot-header p {
   font-size: larger;
 }
+
+.spot-detail-line {
+  height: 10px;
+  border-bottom: solid 2px black;
+}

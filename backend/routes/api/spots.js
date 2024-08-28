@@ -273,7 +273,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
   });
 });
 
-//get all reviews by a spot's id
+//!get all reviews by a spot's id
 router.get('/:id/reviews', async(req, res, next) => {
   const { id: spotId } = req.params;
   const spot = await Spot.findByPk(spotId);
