@@ -37,8 +37,8 @@ const dateTransform = (date) => {
 
 export const sortReviews = (reviews) => {
   reviews.sort((a, b) => {
-    const dateA = a.createdAt.getTime();
-    const dateB = b.createdAt.getTime();
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
 
     if (dateA > dateB) {
       return -1;

@@ -21,7 +21,7 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
   const reviewArr = Object.values(reviews);
 
   //!sort the reviews from latest to oldest
-  // sortReviews(reviewArr);
+  sortReviews(reviewArr);
 
   const reviewV2 = !reviewArr.length 
                 && currUser.user !== null 
