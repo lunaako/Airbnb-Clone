@@ -203,7 +203,7 @@ router.get('/', validateQuery, async (req, res)=> {
   });
 });
 
-//create a new spot
+//!create a new spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { user } = req;
   const {address, city, state, country, lat, lng, name, description, price} = req.body;
@@ -399,7 +399,7 @@ router.delete('/:id', requireAuth, async(req, res, next) => {
 
 });
 
-//add an img to a spot based on spot id
+//!add an img to a spot based on spot id
 router.post('/:id/images', requireAuth, async(req, res, next) => {
   const { id } = req.params;
   const { url, preview } = req.body;

@@ -24,7 +24,7 @@ export default function SpotsGrid({spot}) {
         <div className="location-rating">
           <p>{city}, {state}</p>
           
-          <span> <FontAwesomeIcon icon={faStar} />   {avgRating !== null ? Number(avgRating.toFixed(2)).toFixed(1) : `New`}</span>
+          <span> <FontAwesomeIcon icon={faStar} />   {avgRating !== null || avgRating ? Number(avgRating.toFixed(2)).toFixed(1) : `New`}</span>
         </div>
 
         <p><strong>${price}</strong> night</p>

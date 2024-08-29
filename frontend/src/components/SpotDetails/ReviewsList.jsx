@@ -27,7 +27,7 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
                 && currUser.user !== null 
                 && ownerId !== currUser.user.id;
 
-  console.log(reviews);
+  // console.log(reviews);
   
   return (
     <div className="spot-review-block">
