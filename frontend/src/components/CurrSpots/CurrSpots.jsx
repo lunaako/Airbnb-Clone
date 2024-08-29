@@ -1,0 +1,52 @@
+import './CurrSpots.css';
+import { getSessionSpotsThunk } from '../../store/session';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import SpotsGrid from '../SpotsIndex/SpotsGrid';
+
+
+export default function CurrSpots() {
+  const dispatch = useDispatch();
+  const sessionUser = useSelector(state => state.session.user);
+  const [loaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionUser) {
+      dispatch(getSessionSpotsThunk())
+        .then(setIsLoaded(true));
+    }
+
+  }, [dispatch])
+
+  const spots = sessionUser?.spots ? Object.values(sessionUser.spots): [];
+
+  if (!spots.length && !!sessionUser) {
+    return (
+      <Link to='/spots/new'>Create a New Spot</Link>
+    )
+  }
+
+  return (
+    <>
+      <h1>Manage Spots</h1>
+      <div className='spots-grid'>
+        {loaded && spots.length &&
+          (
+            spots.map(spot => (
+              <div>
+                <SpotsGrid key={spot.id} spot={spot} />
+                <button
+                  onClick={() => navigate(`/spots/${spot.id}/edit`)}
+                >Update</button>
+                <button>Delete</button>
+              </div>
+
+            ))
+          )
+        }
+      </div>
+    </>
+  )
+}

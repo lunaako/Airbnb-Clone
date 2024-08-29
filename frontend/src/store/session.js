@@ -66,6 +66,27 @@ export const logout = () => async (dispatch) => {
   return response;
 };
 
+const GET_SESSION_SPOTS = 'session/get/spots';
+const getSessionSpots = (spots) => {
+  return {
+    type: GET_SESSION_SPOTS,
+    payload: spots
+  }
+}
+export const getSessionSpotsThunk = () => async(dispatch) => {
+  const res = await fetch('/api/spots/current');
+  if (res.ok){
+    const data = await res.json();
+    const { Spots } = data;
+    dispatch(getSessionSpots(Spots));
+    console.log(Spots);
+    return Spots;
+  } else {
+    const err = await res.json();
+    return err;
+  }
+}
+
 const initialState = { user: null };
 
 const sessionReducer = (state = initialState, action) => {
@@ -74,6 +95,19 @@ const sessionReducer = (state = initialState, action) => {
       return { ...state, user: action.payload };
     case REMOVE_USER:
       return { ...state, user: null };
+    
+    case GET_SESSION_SPOTS: {
+      const newState = {...state};
+      const normalizedSpots = {};
+      action.payload.forEach(spot => {
+        normalizedSpots[spot.id] = spot;
+      })
+      newState.user = {
+        ...newState.user,
+        spots: normalizedSpots
+      }
+      return newState;
+    }
     default:
       return state;
   }
