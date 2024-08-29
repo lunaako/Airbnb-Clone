@@ -127,3 +127,7 @@
   height: 10px;
   border-bottom: solid 2px black;
 }
+
+.post-review-disable {
+  display: none;
+}

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createSpotThunk } from "../../store/spots";
-
+import {createSpotThunk } from "../../store/spots";
+import { addImgThunk } from "../../store/spotImage";
+import './SpotForm.css';
+import { useNavigate } from "react-router-dom";
 
 export default function SpotForm() {
   const [country, setCountry] = useState('');
@@ -11,43 +13,107 @@ export default function SpotForm() {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [previewImage, setPreviewImage] = useState([]);
+  const [previewImage, setPreviewImage] = useState('');
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
   const [image3, setImage3] = useState("");
   const [image4, setImage4] = useState("");
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
+  const [errs, setErrs] = useState({});
 
   const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
   const ownerId = sessionUser.id;
+  const navigate = useNavigate();
 
-
-
-  // console.log(userId)
-
-  const handleSumbit = (e) => {
+  const handleSumbit = async(e) => {
     e.preventDefault();
+    const errors = {};
 
-    const newSpot = {
-      ownerId,
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price: +price
-    };
+    if (!country.length) {
+      errors.country = 'Country is required'
+    }
+    if (!address.length) {
+      errors.address = 'Address is required'
+    }
+    if (!city.length) {
+      errors.city = 'City is required'
+    }
+    if (!state.length) {
+      errors.state = 'State is required'
+    }
+    if (!lat.length) {
+      errors.latitude = 'Latitude is required'
+    }
+    if (!lng.length) {
+      errors.longitude = 'Longitude is required'
+    }
+    if (description.length < 30) {
+      errors.description = 'Description needs a minimum of 30 characters'
+    }
+    if(!name.length) {
+      errors.name = 'Name is required'
+    }
+    if (!price.length) {
+      errors.price = 'Price is required'
+    }
+    if (!previewImage.length) {
+      errors.previewImage = 'Preview image is required'
+    }
 
-    dispatch(createSpotThunk(newSpot));
+    const imgUrlFormatCheck = (imageName, img) => {
+      if (img.length && !img.endsWith('.png') && !img.endsWith('.jpg') && !img.endsWith('.jpeg')) {
+        errors[imageName] = 'Image URL must end in .png, .jpg or jpeg';
+      }
+    }
 
-    console.log(newSpot)
+    imgUrlFormatCheck('previewImageFormat', previewImage);
+    imgUrlFormatCheck('image1Format', image1);
+    imgUrlFormatCheck('image2Format', image2);
+    imgUrlFormatCheck('image3Format', image3);
+    imgUrlFormatCheck('image4Format', image4);
+
+    setErrs(errors);
+    // console.log(errors);
+    
+    if (!Object.values(errors).length) {
+      let spotId;
+      const newSpot = {
+        ownerId,
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price: +price
+      };
+
+      const createdSpot = await dispatch(createSpotThunk(newSpot));
+
+      if (createdSpot && createdSpot.id) {
+        spotId = createdSpot.id;
+
+        if (previewImage.length) {
+          const prevImg = { url: previewImage, preview: true };
+          dispatch(addImgThunk(prevImg, spotId));
+        }
+
+        const images = [image1, image2, image3, image4];
+        for (let url of images) {
+          if (url) {
+            const img = { url, preview: false };
+            dispatch(addImgThunk(img, spotId));
+          }
+        }
+      }
+      navigate(`/spots/${spotId}`);
+    }
+  
   }
-
 
   return (
     <form 
@@ -63,7 +129,7 @@ export default function SpotForm() {
 
       <div className="form-locations">
         <label>
-          Country
+          Country {errs.country && <span className="form-errors">{errs.country}</span>}
           <input 
             type='text'
             name='country'
@@ -74,7 +140,7 @@ export default function SpotForm() {
         </label>
 
         <label>
-          Street Address
+          Street Address {errs.address && <span className="form-errors">{errs.address}</span>}
           <input
             type='text'
             name='address'
@@ -85,7 +151,7 @@ export default function SpotForm() {
         </label>
 
         <label>
-          City
+          City {errs.city && <span className="form-errors">{errs.city}</span>}
           <input
             type='text'
             name='city'
@@ -94,9 +160,9 @@ export default function SpotForm() {
             onChange={(e) => setCity( e.target.value)}
           />
         </label>
-        
+
         <label>
-          State
+          State {errs.state && <span className="form-errors">{errs.state}</span>}
           <input
             type='text'
             name='state'
@@ -107,7 +173,7 @@ export default function SpotForm() {
         </label>
 
         <label>
-          Latitude
+          Latitude {errs.latitude && <span className="form-errors">{errs.latitude}</span>}
           <input
             type='number'
             name='lat'
@@ -118,7 +184,7 @@ export default function SpotForm() {
         </label>
 
         <label>
-          Longtitude
+          Longitude {errs.longitude && <span className="form-errors">{errs.longitude}</span>}
           <input
             type='number'
             name='lng'
@@ -142,6 +208,7 @@ export default function SpotForm() {
           onChange={(e) => setDescription(e.target.value)}
         >
         </textarea>
+        {errs.description && <p className="form-errors">{errs.description}</p>}
       </div>
 
       <div className='form-divider'></div>
@@ -159,6 +226,8 @@ export default function SpotForm() {
             onChange={(e) => setName(e.target.value)}
           />
         </label>
+        {errs.name && <p className="form-errors">{errs.name}</p>}
+
       </div>
 
       <div className='form-divider'></div>
@@ -168,7 +237,7 @@ export default function SpotForm() {
         <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
 
         <label>
-          $
+          <span>$</span>
           <input
             type='number'
             name='price'
@@ -177,6 +246,8 @@ export default function SpotForm() {
             onChange={(e) => setPrice(e.target.value)}
           />
         </label>
+        {errs.price && <p className="form-errors">{errs.price}</p>}
+
       </div>
 
       <div className='form-divider'></div>
@@ -194,6 +265,7 @@ export default function SpotForm() {
             onChange={(e) => setPreviewImage(e.target.value)}
           />
         </label>
+        {errs.previewImage && <p className="form-errors">{errs.previewImage}</p>}
 
         <label>
           <input
@@ -204,6 +276,7 @@ export default function SpotForm() {
             onChange={(e) => setImage1(e.target.value)}
           />
         </label>
+        {errs.image1Format && <p className="form-errors">{errs.image1Format}</p>}
 
         <label>
           <input
@@ -214,6 +287,7 @@ export default function SpotForm() {
             onChange={(e) => setImage2(e.target.value)}
           />
         </label>
+        {errs.image2Format && <p className="form-errors">{errs.image2Format}</p>}
 
         <label>
           <input
@@ -224,6 +298,7 @@ export default function SpotForm() {
             onChange={(e) => setImage3(e.target.value)}
           />
         </label>
+        {errs.image3Format && <p className="form-errors">{errs.image3Format}</p>}
 
         <label>
           <input
@@ -234,12 +309,15 @@ export default function SpotForm() {
             onChange={(e) => setImage4(e.target.value)}
           />
         </label>
+        {errs.image4Format && <p className="form-errors">{errs.image4Format}</p>}
+
       </div>
 
       <div className='form-divider'></div>
 
       <button 
         type='submit'
+        // disabled = {Object.values(errs).length}
       >
         Create Spot
       </button>

@@ -33,6 +33,7 @@ const createSpot = (spot) => {
   }
 };
 
+//! thunk action creator ----> create a new spot (POST, '/api/spots')
 export const createSpotThunk = (spot) => async(dispatch) => {
   const res = await csrfFetch('/api/spots', {
     method: 'POST',
@@ -47,7 +48,9 @@ export const createSpotThunk = (spot) => async(dispatch) => {
     const err = await res.json();
     return err;
   }
-}
+};
+
+
 
 const spotsReducer = (state={}, action) => {
   switch (action.type) {

@@ -4,6 +4,7 @@ import { getReviewsThunk } from "../../store/reviews";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import dateTransform, { sortReviews } from "../../utils/date";
+import './SpotDetails.css';
 
 export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerId }) {
   const dispatch = useDispatch();
@@ -28,6 +29,11 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
                 && ownerId !== currUser.user.id;
 
   // console.log(reviews);
+
+  const buttonDisabled = currUser.user === null 
+                        || ownerId === currUser.user.id
+                        || reviewArr.find(review => review.userId === currUser.user.id);
+  
   
   return (
     <div className="spot-review-block">
@@ -38,6 +44,10 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
         </h2>
       </div>
 
+      <button
+        className={buttonDisabled ? 'post-review-disable' : 'post-review-button'}
+        // onClick=
+      >Post Your Review</button>
       
       {
         isLoaded && 

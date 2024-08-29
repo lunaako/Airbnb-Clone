@@ -1,0 +1,12 @@
+import { useDispatch } from 'react-redux';
+import { useModal } from '../../context/Modal';
+import { useState } from 'react';
+import './PostReview.css';
+
+export default function PostReviewModal() {
+  return (
+    <>
+      post review
+    </>
+  )
+}
