@@ -79,7 +79,7 @@ export const getSessionSpotsThunk = () => async(dispatch) => {
     const data = await res.json();
     const { Spots } = data;
     dispatch(getSessionSpots(Spots));
-    console.log(Spots);
+    // console.log(Spots);
     return Spots;
   } else {
     const err = await res.json();

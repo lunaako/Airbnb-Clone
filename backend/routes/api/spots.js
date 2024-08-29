@@ -372,7 +372,7 @@ router.put('/:id', requireAuth, validateSpot, async(req, res, next) => {
 
 });
 
-//delete a spot
+//!delete a spot
 router.delete('/:id', requireAuth, async(req, res, next) => {
   const { id: spotId } = req.params;
   const { user } = req;

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SpotsGrid from '../SpotsIndex/SpotsGrid';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
 
 
 export default function CurrSpots() {
@@ -35,18 +37,22 @@ export default function CurrSpots() {
         {loaded && spots.length &&
           (
             spots.map(spot => (
-              <div>
-                <SpotsGrid key={spot.id} spot={spot} />
+              <div key={spot.id}>
+                <SpotsGrid  spot={spot} />
                 <button
                   onClick={() => navigate(`/spots/${spot.id}/edit`)}
                 >Update</button>
-                <button>Delete</button>
+                {/* <button>Delete</button> */}
+                <OpenModalButton 
+                  buttonText='Delete'
+                  modalComponent={<DeleteSpotModal  spotId={spot.id} />}
+                />
               </div>
 
             ))
           )
         }
-      </div>
+      </div>,
     </>
   )
 }

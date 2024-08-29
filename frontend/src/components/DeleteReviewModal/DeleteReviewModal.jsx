@@ -6,7 +6,6 @@ import { getASpotThunk } from '../../store/currSpot';
 import { getReviewsThunk } from '../../store/reviews';
 
 export default function DeleteReviewModal({ reviewId, spotId }) {
-  console.log(spotId);
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
@@ -21,7 +20,7 @@ export default function DeleteReviewModal({ reviewId, spotId }) {
         onClick={() => dispatch(deleteReviewThunk(reviewId))
                 .then(() => dispatch(getASpotThunk(spotId)))
                 .then(() => dispatch(getReviewsThunk(spotId)))
-                .then( closeModal)}
+                .then(closeModal)}
       >
         Yes (Delete Review)
       </button>
