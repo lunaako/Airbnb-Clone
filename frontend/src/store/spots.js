@@ -70,6 +70,28 @@ export const deleteSpotThunk = (spotId) => async(dispatch) => {
   }
 }
 
+const UPDATE_SPOT = 'spots/update';
+const updateSpot = (spot) => {
+  return {
+    type: UPDATE_SPOT,
+    payload: spot
+  }
+}
+export const updateSpotThunk = (spotId, spot) => async(dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: 'PUT',
+    body: JSON.stringify(spot)
+  });
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(updateSpot(data));
+    return data;
+  } else {
+    const err = await res.json();
+    return err;
+  }
+}
+
 const spotsReducer = (state={}, action) => {
   switch (action.type) {
     case GET_ALLSPOTS: {
@@ -95,6 +117,12 @@ const spotsReducer = (state={}, action) => {
     case DELETE_SPOT: {
       const newState = {...state};
       delete newState[action.payload];
+      return newState;
+    }
+
+    case UPDATE_SPOT: {
+      const newState = {...state};
+      newState[action.payload.id] = action.payload;
       return newState;
     }
 

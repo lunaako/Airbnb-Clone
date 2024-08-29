@@ -348,7 +348,7 @@ router.get('/:id', async(req, res, next) => {
   }
 });
 
-//edit a spot
+//!edit a spot
 router.put('/:id', requireAuth, validateSpot, async(req, res, next) => {
   const { user } = req;
   const { id:spotId } = req.params;
