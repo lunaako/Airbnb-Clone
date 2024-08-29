@@ -1,11 +1,15 @@
 import './DeleteReview.css';
 import { useModal } from '../../context/Modal';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { deleteReviewThunk } from '../../store/reviews';
+import { getASpotThunk } from '../../store/currSpot';
+import { getReviewsThunk } from '../../store/reviews';
 
-export default function DeleteReviewModal() {
+export default function DeleteReviewModal({ reviewId, spotId }) {
+  console.log(spotId);
   const dispatch = useDispatch();
   const { closeModal } = useModal();
+
   return (
     <>
       <div>
@@ -14,7 +18,10 @@ export default function DeleteReviewModal() {
       </div>
 
       <button
-
+        onClick={() => dispatch(deleteReviewThunk(reviewId))
+                .then(() => dispatch(getASpotThunk(spotId)))
+                .then(() => dispatch(getReviewsThunk(spotId)))
+                .then( closeModal)}
       >
         Yes (Delete Review)
       </button>

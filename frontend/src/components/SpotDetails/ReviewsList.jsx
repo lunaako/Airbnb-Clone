@@ -37,7 +37,7 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
 
   const buttonDisabled = currUser.user === null 
                         || ownerId === currUser.user.id
-                        || reviewArr.find(review => review.userId === currUser.user.id);
+                        || reviewArr.find(review => review.userId   === currUser.user.id);
                         
   
   return (
@@ -74,7 +74,10 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
               >
                 <OpenModalButton
                   buttonText='Delete'
-                  modalComponent={<DeleteReviewModal />}
+                  modalComponent={<DeleteReviewModal 
+                                  reviewId={review.id}
+                                  spotId={spotId}
+                                  />}
                 />
               </div>
 

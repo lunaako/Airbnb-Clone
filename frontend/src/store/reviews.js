@@ -25,7 +25,7 @@ export const getReviewsThunk = (spotId) => async(dispatch) => {
 
 const CREATE_REVIEW = 'reviews/create';
 //! normal action creator ---> create a review for a spot
-const createReview = (review,) => {
+const createReview = (review) => {
   return {
     type: CREATE_REVIEW,
     payload: review
@@ -41,7 +41,6 @@ export const createReviewThunk = (review, stars, spotId) => async(dispatch) => {
   });
 
   if (res.ok) {
-    console.log("ok");
     const data = await res.json();
     // console.log(data);
     return data;
@@ -52,7 +51,28 @@ export const createReviewThunk = (review, stars, spotId) => async(dispatch) => {
 }
 
 //!create action for delete a review
-const DELETE_REVIEW = 'reviews/'
+const DELETE_REVIEW = 'reviews/delete';
+const deleteReview = (reviewId) => {
+  return {
+    type: DELETE_REVIEW,
+    payload: reviewId
+  }
+}
+
+export const deleteReviewThunk = (reviewId) => async(dispatch) => {
+  const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+    method: 'DELETE'
+  });
+
+  if (res.ok) {
+    // const data = await res.json();
+    dispatch(deleteReview(reviewId));
+    return null;
+  } else {
+    const err = await res.json();
+    return err;
+  }
+}
 
 const reviewsReducer = (state={}, action) => {
   switch(action.type) {
@@ -71,6 +91,12 @@ const reviewsReducer = (state={}, action) => {
         ...state,
         [review.id]: review
       }
+      return newState;
+    }
+
+    case DELETE_REVIEW: {
+      const newState = {...state};
+      delete newState[action.payload];
       return newState;
     }
 
