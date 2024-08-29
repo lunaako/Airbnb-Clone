@@ -4,21 +4,26 @@ import { getReviewsThunk } from "../../store/reviews";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import dateTransform, { sortReviews } from "../../utils/date";
+import OpenModalButton from "../OpenModalButton/OpenModalButton.jsx";
 import './SpotDetails.css';
+import PostReviewModal from "../PostReviewModal/PostReviewModal.jsx";
+import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal.jsx";
 
 export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerId }) {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const currUser = useSelector(state => state.session);
+  const reviews = useSelector(state => state.reviews);
+
 
   useEffect(() => {
+
     dispatch(getReviewsThunk(spotId)).then(() => {
       setIsLoaded(true)
     })
-  }, [dispatch, spotId])
+  }, [dispatch, spotId]);
 
 
-  const reviews = useSelector(state => state.reviews);
   const reviewArr = Object.values(reviews);
 
   //!sort the reviews from latest to oldest
@@ -33,7 +38,7 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
   const buttonDisabled = currUser.user === null 
                         || ownerId === currUser.user.id
                         || reviewArr.find(review => review.userId === currUser.user.id);
-  
+                        
   
   return (
     <div className="spot-review-block">
@@ -44,10 +49,12 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
         </h2>
       </div>
 
-      <button
-        className={buttonDisabled ? 'post-review-disable' : 'post-review-button'}
-        // onClick=
-      >Post Your Review</button>
+      <div className={buttonDisabled ? 'post-review-disable' : 'post-review-button'}>
+        <OpenModalButton
+          buttonText="Post Your Review"
+          modalComponent={<PostReviewModal spotId={spotId}/>}
+        />
+      </div>
       
       {
         isLoaded && 
@@ -59,6 +66,19 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
               <h3>{review.User.firstName}</h3>
               <h3>{dateTransform(review.createdAt)}</h3>
               <p>{review.review}</p>
+
+              <div
+                className={currUser.user === null
+                  || currUser.user.id !== review.userId ? 'disable-delete' : 'delete-review-button'
+                }
+              >
+                <OpenModalButton
+                  buttonText='Delete'
+                  modalComponent={<DeleteReviewModal />}
+                />
+              </div>
+
+
             </div>
           ))
         }

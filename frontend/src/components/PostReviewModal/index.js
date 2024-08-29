@@ -1,3 +1,3 @@
-import PostReviewModal from "./PostReview.Modaljsx";
+import PostReviewModal from "./PostReviewModal";
 
 export default PostReviewModal;

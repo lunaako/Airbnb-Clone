@@ -131,3 +131,7 @@
 .post-review-disable {
   display: none;
 }
+
+.disable-delete {
+  display: none;
+}
