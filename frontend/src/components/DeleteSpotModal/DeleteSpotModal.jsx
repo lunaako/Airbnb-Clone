@@ -12,13 +12,14 @@ export default function DeleteSpotModal({spotId}) {
   const dispatch = useDispatch();
 
   return (
-    <>
-      <div>
+    <div className="delete-spot-modal-container">
+      <div className='delete-spot-header'>
         <h1>Confirm Delete</h1>
         <p>Are you sure you want to remove this spot from the listings?</p>
       </div>
 
       <button
+        className='delete-spot-yes'
         onClick={() => dispatch(deleteSpotThunk(spotId))
                   .then(() => dispatch(getSessionSpotsThunk()))
                   .then(closeModal)}
@@ -30,6 +31,6 @@ export default function DeleteSpotModal({spotId}) {
         No  (Keep Spot)
 
       </button>
-    </>
+    </div>
   )
 }

@@ -1,0 +1,37 @@
+#modal-content {
+  width: 50%;
+  height: fit-content;
+  border-radius: 10px;
+  padding-bottom: 5%;
+}
+
+.delete-spot-modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:15px
+}
+
+.delete-spot-header h1 {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+.delete-spot-header p {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 40px;
+}
+
+.delete-spot-modal-container button {
+  width: 90%;
+  height: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.delete-spot-yes {
+  background-color: #ff5a5f;
+  color: white;
+}
