@@ -62,10 +62,10 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
         <div className="review-detail">
         {
           reviewArr.map(review => (
-            <div key={review.id} >
-              <h3>{review.User.firstName}</h3>
-              <h3>{dateTransform(review.createdAt)}</h3>
-              <p>{review.review}</p>
+            <div className="singleReview" key={review.id} >
+              <h4 className="reviewUser">{review.User.firstName}</h4>
+              <h4 className="reviewDate">{dateTransform(review.createdAt)}</h4>
+              <p className="reviewMessage">{review.review}</p>
 
               <div
                 className={currUser.user === null

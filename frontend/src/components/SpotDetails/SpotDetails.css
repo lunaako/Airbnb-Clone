@@ -135,3 +135,25 @@
 .disable-delete {
   display: none;
 }
+
+/* Review List CSS */
+.spot-detail-line,
+.spot-review-block {
+  margin: auto;
+  width: 90%;
+}
+
+.reviewUser {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.reviewDate {
+  margin-top: 0px;
+  margin-bottom: 5px;
+  color: gray;
+}
+
+.reviewMessage {
+  font-size: 0.8em;
+}

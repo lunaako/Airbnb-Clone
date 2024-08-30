@@ -35,7 +35,7 @@ function LoginFormModal() {
         )}
 
       <form onSubmit={handleSubmit}>
-        <label>
+        <label className="loginLabel">
           Username or Email
           <input
             type="text"
@@ -45,7 +45,7 @@ function LoginFormModal() {
           />
         </label>
 
-        <label>
+        <label className="loginLabel">
           Password
           <input
             type="password"

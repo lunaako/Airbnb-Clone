@@ -13,14 +13,14 @@ form {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap:10px
+  gap:10px;
 }
 
-label {
+.loginLabel {
   width: 90%;
 }
 
-input {
+.loginLabel > input {
   width: 100%;
   height:30px;
 }
@@ -32,7 +32,15 @@ input {
 #login-button {
   width: 90%;
   height: 50px;
+}
+
+#login-button:disabled {
+  width: 90%;
+  height: 50px;
   background-color: white;
+  color: gray;
+  border: 1px solid gray;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 #demo-user-login {

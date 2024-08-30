@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {createSpotThunk, updateSpotThunk } from "../../store/spots";
 import { addImgThunk } from "../../store/spotImage";
@@ -27,8 +27,6 @@ export default function SpotForm({ exsSpot, spotId }) {
   const [lat, setLat] = useState(exsSpot?.lat || "");
   const [lng, setLng] = useState(exsSpot?.lng || "");
   const [errs, setErrs] = useState({});
-
-
 
 
   const handleSumbit = async(e) => {
@@ -72,7 +70,7 @@ export default function SpotForm({ exsSpot, spotId }) {
         errors[imageName] = 'Image URL must end in .png, .jpg or jpeg';
       }
     }
-
+    
     imgUrlFormatCheck('previewImageFormat', previewImage);
     imgUrlFormatCheck('image1Format', image1);
     imgUrlFormatCheck('image2Format', image2);
@@ -80,7 +78,6 @@ export default function SpotForm({ exsSpot, spotId }) {
     imgUrlFormatCheck('image4Format', image4);
 
     setErrs(errors);
-    // console.log(errors)
 
     if (!Object.values(errors).length) {
       const newSpot = {
@@ -99,7 +96,6 @@ export default function SpotForm({ exsSpot, spotId }) {
       console.log(spotId)
       let updatedSpot;
       if (exsSpot) {
-        console.log(1111)
         updatedSpot = await dispatch(updateSpotThunk(spotId, newSpot));
       } else {
         updatedSpot = await dispatch(createSpotThunk(newSpot));
@@ -133,7 +129,7 @@ export default function SpotForm({ exsSpot, spotId }) {
 
       <div className="form-header">
         <h1>{exsSpot ? `Update Your Spot`: `Create a New Spot`}</h1>
-        <h3>Where's your place located?</h3>
+        <h3>Where&apos;s your place located?</h3>
         <p>Guests will only get your exact address once they booked a reservation</p>
       </div>
 
@@ -232,7 +228,7 @@ export default function SpotForm({ exsSpot, spotId }) {
 
       <div className="form-setTitle">
         <h3>Create a title for your spot</h3>
-        <p>Catch guests' attention with a spot title that highlights what makes your place special</p>
+        <p>Catch guests&apos; attention with a spot title that highlights what makes your place special</p>
 
         <label>
           <input 
@@ -283,6 +279,9 @@ export default function SpotForm({ exsSpot, spotId }) {
           />
         </label>
         {errs.previewImage && <p className="form-errors">{errs.previewImage}</p>}
+
+        {errs.previewImageFormat && <p className="form-errors">{errs.previewImageFormat}</p>}
+
 
         <label>
           <input

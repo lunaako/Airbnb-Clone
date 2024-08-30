@@ -9,19 +9,20 @@
 }
 
 .new-spot-form input {
+  width: 100%;
   margin-top: 6px;
   margin-bottom: 10px;
 }
 
-.new-spot-form > label {
-  display: flex;
-  flex: 1;
-  align-items: center;
+.form-location-label {
+  width: 100%;
+  display: inline-block;
+  flex-direction: column;
+  align-items: start;
 }
 
-.new-spot-form > input {
-  flex: 1;
-  box-sizing: border-box;
+.form-locations {
+  width: 100%;
 }
 
 .spot-form-inline {
@@ -58,9 +59,9 @@
 }
 
 .form-divider {
-  margin-left: 6px;
+  /* margin-left: 6px; */
   border-bottom: 1px solid gray;
-  width: 103%;
+  width: 100%;
   height: 1px;
 }
 
@@ -79,17 +80,21 @@
 }
 
 .spot-form-price {
-  display: inline;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 #money-symbol {
-  width: 5%;
-  /* margin-right: 5px; */
+  text-align: center;
+  margin: auto;
+  margin-bottom: 2px;
+  font-size: small;
+  width: 3%;
 }
 
 .spot-form-price input{
-  width: 90%;
-  margin-left: 10px;
+  width: 97%;
 }
 
 .form-header {
@@ -98,6 +103,12 @@
 
 .new-spot-form label {
   font-size: 13px;
+}
+
+.form-price,
+.form-setTitle,
+.form-image {
+  width: 100%;
 }
 
 .form-setTitle input,
