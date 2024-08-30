@@ -79,12 +79,12 @@
   display: flex;
   flex-direction: row;
   gap:10%;
+  width: 100%;
 }
 
 .detail-price-review-rating p {
   font-weight: bold;
   margin: 0;
-  width: 45%;
 }
 
 
@@ -92,18 +92,20 @@
 .price-night {
   color: black;
   font-weight:lighter;
+  width: 40%;
 }
 
 .avg-reviews {
+  display: inline-block;
   font-size: 1.2rem;
   margin-left: 10px;
-  width: 45%;
+  width: 60%;
   text-align: end;
 }
 
 /* Reserve Button */
 .detail-right-info button {
-  background-color: #ff5a5f;
+  background-color: #DFBE97;
   color: white;
   border: none;
   border-radius: 5px;
@@ -114,7 +116,7 @@
 }
 
 .detail-other-info button:hover {
-  background-color: #e14b4e;
+  background-color: #7E5430;
 }
 
 .spot-header {

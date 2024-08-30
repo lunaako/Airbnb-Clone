@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { getASpotThunk } from "../../store/currSpot";
 import './SpotDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
 import ReviewsList from "./ReviewsList";
 import { formatRating } from "../../utils/util";
 
@@ -91,9 +91,9 @@ export default function SpotDetails() {
 
         <div className="detail-right-info">
           <div className="detail-price-review-rating">
-            <p>${price} <span className="price-night">night</span></p>
+            <p className="price-night">${price} <br/><span>per night</span></p>
 
-            <span className="avg-reviews"> <FontAwesomeIcon icon={faStar} /> {avgStarRating !== null ? formatRating(avgStarRating) : `New`} {reviews}</span>
+            <span className="avg-reviews"> <FontAwesomeIcon icon={faPaw} /> {avgStarRating !== null ? formatRating(avgStarRating) : `New`} {reviews}</span>
           </div>
 
           <button

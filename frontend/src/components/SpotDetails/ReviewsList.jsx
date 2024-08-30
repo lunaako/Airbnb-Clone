@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getReviewsThunk } from "../../store/reviews";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
 import dateTransform, { sortReviews } from "../../utils/date";
 import OpenModalButton from "../OpenModalButton/OpenModalButton.jsx";
 import './SpotDetails.css';
@@ -46,7 +46,7 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
 
       <div className="review-header">
         <h2>
-          <FontAwesomeIcon icon={faStar} /> {avgStarRating !== null ? formatRating(avgStarRating) : `New`} {reviewCount}
+          <FontAwesomeIcon icon={faPaw} /> {avgStarRating !== null ? formatRating(avgStarRating) : `New`} {reviewCount}
         </h2>
       </div>
 
