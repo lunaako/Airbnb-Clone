@@ -71,7 +71,29 @@ function SignupFormModal() {
           <p style={{textAlign: 'center', color: 'red'}}>{errors.confirmPassword}</p>
         )}
 
-      <form onSubmit={handleSubmit}>
+      <form className="signup-form-profile" onSubmit={handleSubmit}>
+
+        <label className='signup-firstname'>
+          First Name
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Last Name
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </label>
+
+        <div className='signup-divider'></div>
+
         <label>
           Email
           <input
@@ -90,24 +112,9 @@ function SignupFormModal() {
             required
           />
         </label>
-        <label>
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </label>
+
+        <div className='signup-divider'></div>
+        
         <label>
           Password
           <input
@@ -128,6 +135,7 @@ function SignupFormModal() {
         </label>
 
         <button 
+          className='signup-button'
           disabled = {isDisabled()}
           type="submit"
         >Sign Up</button>

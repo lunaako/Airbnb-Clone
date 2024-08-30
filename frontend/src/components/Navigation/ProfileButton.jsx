@@ -53,14 +53,15 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <div className='profile-divider'></div>
             <li>
-              <NavLink to='/spots/current'>Manage Spots</NavLink>
+              <NavLink className="profile-manage-spots" to='/spots/current'>Manage Spots</NavLink>
             </li>
+            <div className='profile-divider'></div>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button className = "profile-logout" onClick={logout}>Log Out</button>
             </li>
           </>
         ) : (
-          <>
+          <div className='dropdown-login-signup'>
             <OpenModalMenuItem
               itemText="Log In"
               onItemClick={closeMenu}
@@ -71,7 +72,7 @@ function ProfileButton({ user }) {
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
-          </>
+          </div>
         )}
       </ul>
     </>
