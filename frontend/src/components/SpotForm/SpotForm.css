@@ -1,3 +1,107 @@
 .form-errors {
   color: red;
 }
+
+.new-spot-form {
+  display: flex;
+  margin: auto;
+  width: 45%;
+}
+
+.new-spot-form input {
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.new-spot-form > label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.new-spot-form > input {
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.spot-form-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.inline-first {
+  width: 60%;
+  margin-right: 3px;
+}
+
+.spot-form-comma {
+  width: 5%;
+  text-align: center;
+  margin-left: 3px;
+  margin-bottom: 8px;
+}
+
+ .inline-second {
+  /* display: flex;
+  flex-direction: column; */
+  width: 35%;
+}  
+
+.spot-form-lat {
+  width: 50%;
+}
+
+.spot-form-lng {
+  width: 45%;
+}
+
+.form-divider {
+  margin-left: 6px;
+  border-bottom: 1px solid gray;
+  width: 103%;
+  height: 1px;
+}
+
+.form-description textarea {
+  width: 100%;
+}
+
+.new-spot-form h3 {
+  margin-bottom: 5px;
+  margin: auto;
+}
+
+.new-spot-form p:not(.spot-form-comma) {
+  margin-top: 5px;
+  font-size: 0.8em;
+}
+
+.spot-form-price {
+  display: inline;
+}
+
+#money-symbol {
+  width: 5%;
+  /* margin-right: 5px; */
+}
+
+.spot-form-price input{
+  width: 90%;
+  margin-left: 10px;
+}
+
+.form-header {
+  width: 100%;
+}
+
+.new-spot-form label {
+  font-size: 13px;
+}
+
+.form-setTitle input,
+.form-price input,
+.form-image input {
+  margin-bottom: 0px;
+}

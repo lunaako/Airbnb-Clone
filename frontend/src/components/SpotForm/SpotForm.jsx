@@ -133,12 +133,12 @@ export default function SpotForm({ exsSpot, spotId }) {
 
       <div className="form-header">
         <h1>{exsSpot ? `Update Your Spot`: `Create a New Spot`}</h1>
-        <h2>Where's your place located?</h2>
+        <h3>Where's your place located?</h3>
         <p>Guests will only get your exact address once they booked a reservation</p>
       </div>
 
       <div className="form-locations">
-        <label>
+        <label className="form-location-label">
           Country {errs.country && <span className="form-errors">{errs.country}</span>}
           <input 
             type='text'
@@ -149,7 +149,7 @@ export default function SpotForm({ exsSpot, spotId }) {
           />
         </label>
 
-        <label>
+        <label className="form-location-label">
           Street Address {errs.address && <span className="form-errors">{errs.address}</span>}
           <input
             type='text'
@@ -160,55 +160,62 @@ export default function SpotForm({ exsSpot, spotId }) {
           />
         </label>
 
-        <label>
-          City {errs.city && <span className="form-errors">{errs.city}</span>}
-          <input
-            type='text'
-            name='city'
-            placeholder="City"
-            value={city}
-            onChange={(e) => setCity( e.target.value)}
-          />
-        </label>
+        <div className="spot-form-inline">
+          <label className="spot-form-city inline-first">
+            City {errs.city && <span className="form-errors">{errs.city}</span>}
+            <input
+              type='text'
+              name='city'
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </label>
+          <p className="spot-form-comma">,</p>
+          <label className="spot-form-state inline-second">
+            State {errs.state && <span className="form-errors">{errs.state}</span>}
+            <input
+              type='text'
+              name='state'
+              placeholder="STATE"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            />
+          </label>
+        </div>
 
-        <label>
-          State {errs.state && <span className="form-errors">{errs.state}</span>}
-          <input
-            type='text'
-            name='state'
-            placeholder="STATE"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-          />
-        </label>
+        <div className="spot-form-inline">
+          <label className="spot-form-lat inline-first">
+            Latitude {errs.latitude && <span className="form-errors">{errs.latitude}</span>}
+            <input
+              type='number'
+              name='lat'
+              placeholder="Latitude"
+              value={lat}
+              onChange={(e) => setLat(e.target.value)}
+            />
+          </label>
 
-        <label>
-          Latitude {errs.latitude && <span className="form-errors">{errs.latitude}</span>}
-          <input
-            type='number'
-            name='lat'
-            placeholder="Latitude"
-            value={lat}
-            onChange={(e) => setLat(e.target.value)}
-          />
-        </label>
+          <p className="spot-form-comma">,</p>
 
-        <label>
-          Longitude {errs.longitude && <span className="form-errors">{errs.longitude}</span>}
-          <input
-            type='number'
-            name='lng'
-            placeholder="Longitude"
-            value={lng}
-            onChange={(e) => setLng(e.target.value)}
-          />
-        </label>
+          <label className="spot-form-lng inline-second">
+            Longitude {errs.longitude && <span className="form-errors">{errs.longitude}</span>}
+            <input
+              type='number'
+              name='lng'
+              placeholder="Longitude"
+              value={lng}
+              onChange={(e) => setLng(e.target.value)}
+            />
+          </label>
+        </div>
+
       </div>
 
       <div className='form-divider'></div>
 
       <div className="form-description">
-        <h2>Describe your place to guests</h2>
+        <h3>Describe your place to guests</h3>
         <p>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood.</p>
 
         <textarea
@@ -224,7 +231,7 @@ export default function SpotForm({ exsSpot, spotId }) {
       <div className='form-divider'></div>
 
       <div className="form-setTitle">
-        <h2>Create a title for your spot</h2>
+        <h3>Create a title for your spot</h3>
         <p>Catch guests' attention with a spot title that highlights what makes your place special</p>
 
         <label>
@@ -243,11 +250,11 @@ export default function SpotForm({ exsSpot, spotId }) {
       <div className='form-divider'></div>
 
       <div className="form-price">
-        <h2>Set a base price for your spot</h2>
+        <h3>Set a base price for your spot</h3>
         <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
 
-        <label>
-          <span>$</span>
+        <label className="spot-form-price">
+          <span id="money-symbol">$</span>
           <input
             type='number'
             name='price'
@@ -263,7 +270,7 @@ export default function SpotForm({ exsSpot, spotId }) {
       <div className='form-divider'></div>
 
       <div className="form-image">
-        <h2>Liven up your spot with photos</h2>
+        <h3>Liven up your spot with photos</h3>
         <p>Submit a link to at least one photo to publish your spot.</p>
 
         <label>
