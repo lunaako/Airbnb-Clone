@@ -18,7 +18,7 @@ export default function SpotForm({ exsSpot, spotId }) {
   const [state, setState] = useState(exsSpot?.state || '');
   const [description, setDescription] = useState(exsSpot?.description || '');
   const [name, setName] = useState(exsSpot?.name || '');
-  const [price, setPrice] = useState(exsSpot?.price || '');
+  const [price, setPrice] = useState(exsSpot?.price || 0);
   const [previewImage, setPreviewImage] = useState(exsSpot?.SpotImages.find(img => img.preview).url || '');
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
@@ -46,19 +46,25 @@ export default function SpotForm({ exsSpot, spotId }) {
     if (!state.length) {
       errors.state = 'State is required'
     }
-    if (!lat.length) {
+    if (lat !== 0 && !lat) {
       errors.latitude = 'Latitude is required'
+    } else if (lat < -90 || lat > 90) {
+      errors.latitude = 'Latitude must be within -90 and 90'
     }
-    if (!lng.length) {
+    if (lng !== 0 && !lng) {
       errors.longitude = 'Longitude is required'
+    } else if (lng < -180 || lng > 180) {
+      errors.longitude = 'Longitude must be within -180 and 180'
     }
     if (description.length < 30) {
       errors.description = 'Description needs a minimum of 30 characters'
     }
     if(!name.length) {
       errors.name = 'Name is required'
+    } else if (name.length > 50) {
+      errors.name = 'Name must be within 50 characters'
     }
-    if (!price.length) {
+    if (price === 0) {
       errors.price = 'Price is required'
     }
     if (!previewImage.length) {
@@ -90,10 +96,10 @@ export default function SpotForm({ exsSpot, spotId }) {
         lng,
         name,
         description,
-        price: +price
+        price
       };
 
-      console.log(spotId)
+      // console.log(spotId)
       let updatedSpot;
       if (exsSpot) {
         updatedSpot = await dispatch(updateSpotThunk(spotId, newSpot));
