@@ -1,7 +1,6 @@
 import './DeleteSpot.css';
 import { useModal } from '../../context/Modal';
 import { useDispatch } from 'react-redux';
-import OpenModalButton from "../OpenModalButton/OpenModalButton.jsx";
 import { deleteSpotThunk } from '../../store/spots.js';
 import { getSessionSpotsThunk } from '../../store/session.js';
 

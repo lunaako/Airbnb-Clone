@@ -25,15 +25,15 @@ export const getReviewsThunk = (spotId) => async(dispatch) => {
 
 const CREATE_REVIEW = 'reviews/create';
 //! normal action creator ---> create a review for a spot
-const createReview = (review) => {
-  return {
-    type: CREATE_REVIEW,
-    payload: review
-  }
-}
+// const createReview = (review) => {
+//   return {
+//     type: CREATE_REVIEW,
+//     payload: review
+//   }
+// }
 
 //! thunk action creator ----> create a new review(POST /api/)
-export const createReviewThunk = (review, stars, spotId) => async(dispatch) => {
+export const createReviewThunk = (review, stars, spotId) => async() => {
 
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: 'POST',
