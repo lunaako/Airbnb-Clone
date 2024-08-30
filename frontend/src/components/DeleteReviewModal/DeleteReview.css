@@ -1,0 +1,37 @@
+.delete-review-modal {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:10px;
+}
+
+.delete-review-header {
+  text-align: center;
+}
+
+.delete-review-header h1 {
+  margin-bottom: 0px;
+}
+
+.delete-review-header p {
+  margin-top: 10px;
+  margin-right: 60px;
+}
+
+.delete-review-modal button {
+  height: 50px;
+  width: 90%;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+}
+
+.delete-review-yes {
+  background-color: #ff5a5f;
+}
+
+.delete-review-no {
+  background-color: darkgray;
+}

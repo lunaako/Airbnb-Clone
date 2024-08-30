@@ -145,7 +145,11 @@
   display: none;
 }
 
-/* Review List CSS */
+.delete-review-button button{
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .spot-detail-line,
 .spot-review-block {
   margin: auto;

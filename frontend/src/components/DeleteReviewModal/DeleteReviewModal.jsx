@@ -10,13 +10,14 @@ export default function DeleteReviewModal({ reviewId, spotId }) {
   const { closeModal } = useModal();
 
   return (
-    <>
-      <div>
+    <div className='delete-review-modal'>
+      <div className='delete-review-header'>
         <h1>Confirm Delete</h1>
         <p>Are you sure you want to delete this review?</p>
       </div>
 
       <button
+        className='delete-review-yes'
         onClick={() => dispatch(deleteReviewThunk(reviewId))
                 .then(() => dispatch(getASpotThunk(spotId)))
                 .then(() => dispatch(getReviewsThunk(spotId)))
@@ -26,10 +27,11 @@ export default function DeleteReviewModal({ reviewId, spotId }) {
       </button>
       
       <button
+        className='delete-review-no'
         onClick={() => closeModal()}
       >
         No (Keep Review)
       </button>
-    </>
+    </div>
   )
 }

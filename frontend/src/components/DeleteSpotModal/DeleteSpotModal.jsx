@@ -27,7 +27,9 @@ export default function DeleteSpotModal({spotId}) {
         Yes  (Delete Spot)
       </button>
       
-      <button onClick={() => closeModal()}>
+      <button 
+        className='delete-spot-no'
+        onClick={() => closeModal()}>
         No  (Keep Spot)
 
       </button>
