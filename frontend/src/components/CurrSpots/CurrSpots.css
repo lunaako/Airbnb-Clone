@@ -1,0 +1,30 @@
+.manage-spots-whole {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+
+.create-new-spot-currSpot {
+  text-decoration: none;
+  color: black;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px 10px;
+  display: inline-block;
+  margin-left: 25px;
+}
+
+.manage-spots-blocks button{
+  border-radius: 10px;
+  border: 2px solid black;
+  margin-right: 5px;
+  margin-left: 7px;
+  cursor: pointer;
+}
+
+.manage-spots-whole h1,
+.manage-spots-no-spots
+{
+  margin-left: 25px;
+}

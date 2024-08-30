@@ -63,7 +63,7 @@ function LoginFormModal() {
       </form>
 
       <button
-        onClick={() => dispatch(sessionActions.login({'credential': 'Demo-lition', 'password': 'password'})).then(closeModal)}
+        onClick={() => dispatch(sessionActions.login({'credential': 'Demo-lition', 'password': 'password'})).then(() => dispatch(sessionActions.getSessionSpotsThunk())).then(closeModal)}
         id='demo-user-login'
       >Demo User</button>
     </>

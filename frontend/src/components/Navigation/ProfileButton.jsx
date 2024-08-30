@@ -53,7 +53,7 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <div className='profile-divider'></div>
             <li>
-              <NavLink className="profile-manage-spots" to='/spots/current'>Manage Spots</NavLink>
+              <NavLink className="profile-manage-spots" to='/spots/current' onClick={closeMenu}>Manage Spots</NavLink>
             </li>
             <div className='profile-divider'></div>
             <li>

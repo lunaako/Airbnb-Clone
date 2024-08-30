@@ -39,7 +39,7 @@ export default function PostReviewModal({spotId}) {
   return (
     <>
       <div className="post-review-modal-title">
-        <p>How was your stay?</p>
+        <h2>How was your stay?</h2>
       </div>
       <form onSubmit={handleSubmit}>
         <textarea

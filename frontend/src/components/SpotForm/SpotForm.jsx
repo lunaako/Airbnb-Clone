@@ -96,7 +96,8 @@ export default function SpotForm({ exsSpot, spotId }) {
         lng,
         name,
         description,
-        price
+        price,
+        previewImage
       };
 
       // console.log(spotId)

@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import SpotsGrid from '../SpotsIndex/SpotsGrid';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
-// import SpotForm from '../SpotForm/SpotForm';
 
 
 export default function CurrSpots() {
@@ -32,18 +31,23 @@ export default function CurrSpots() {
 
   if (!spots.length && !!sessionUser) {
     return (
-      <Link to='/spots/new'>Create a New Spot</Link>
+      <>
+        <h1 className='manage-spots-no-spots'>Manage Spots</h1>
+
+        <Link to='/spots/new' className="create-new-spot-currSpot">Create a New Spot</Link>
+  
+      </>
     )
   }
 
   return (
-    <>
+    <div className='manage-spots-whole'>
       <h1>Manage Spots</h1>
       <div className='spots-grid'>
-        {loaded && spots.length &&
+        {loaded && !!spots.length &&
           (
             spots.map(spot => (
-              <div key={spot.id}>
+              <div key={spot.id} className='manage-spots-blocks'>
                 <SpotsGrid  spot={spot} />
                 <button
                   onClick={() => handleUpdate(spot)}
@@ -58,7 +62,7 @@ export default function CurrSpots() {
             ))
           )
         }
-      </div>,
-    </>
+      </div>
+    </div>
   )
 }
