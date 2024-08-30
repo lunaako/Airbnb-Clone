@@ -1,33 +1,38 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {createSpotThunk } from "../../store/spots";
+import {createSpotThunk, updateSpotThunk } from "../../store/spots";
 import { addImgThunk } from "../../store/spotImage";
 import './SpotForm.css';
 import { useNavigate } from "react-router-dom";
 
-export default function SpotForm() {
-  const [country, setCountry] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [description, setDescription] = useState('');
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [previewImage, setPreviewImage] = useState('');
-  const [image1, setImage1] = useState("");
-  const [image2, setImage2] = useState("");
-  const [image3, setImage3] = useState("");
-  const [image4, setImage4] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [errs, setErrs] = useState({});
-
+export default function SpotForm({ exsSpot, spotId }) {
   const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
   const ownerId = sessionUser.id;
   const navigate = useNavigate();
 
+
+  const [country, setCountry] = useState(exsSpot?.country || '');
+  const [address, setAddress] = useState(exsSpot?.address || '');
+  const [city, setCity] = useState(exsSpot?.city || '');
+  const [state, setState] = useState(exsSpot?.state || '');
+  const [description, setDescription] = useState(exsSpot?.description || '');
+  const [name, setName] = useState(exsSpot?.name || '');
+  const [price, setPrice] = useState(exsSpot?.price || '');
+  const [previewImage, setPreviewImage] = useState(exsSpot?.SpotImages.find(img => img.preview).url || '');
+  const [image1, setImage1] = useState("");
+  const [image2, setImage2] = useState("");
+  const [image3, setImage3] = useState("");
+  const [image4, setImage4] = useState("");
+  const [lat, setLat] = useState(exsSpot?.lat || "");
+  const [lng, setLng] = useState(exsSpot?.lng || "");
+  const [errs, setErrs] = useState({});
+
+
+
+
   const handleSumbit = async(e) => {
+
     e.preventDefault();
     const errors = {};
 
@@ -75,10 +80,9 @@ export default function SpotForm() {
     imgUrlFormatCheck('image4Format', image4);
 
     setErrs(errors);
-    // console.log(errors);
-    
+    // console.log(errors)
+
     if (!Object.values(errors).length) {
-      let spotId;
       const newSpot = {
         ownerId,
         address,
@@ -92,10 +96,17 @@ export default function SpotForm() {
         price: +price
       };
 
-      const createdSpot = await dispatch(createSpotThunk(newSpot));
+      console.log(spotId)
+      let updatedSpot;
+      if (exsSpot) {
+        console.log(1111)
+        updatedSpot = await dispatch(updateSpotThunk(spotId, newSpot));
+      } else {
+        updatedSpot = await dispatch(createSpotThunk(newSpot));
+      }
 
-      if (createdSpot && createdSpot.id) {
-        spotId = createdSpot.id;
+      if (updatedSpot && updatedSpot.id) {
+        spotId = updatedSpot.id;
 
         if (previewImage.length) {
           const prevImg = { url: previewImage, preview: true };
@@ -112,7 +123,6 @@ export default function SpotForm() {
       }
       navigate(`/spots/${spotId}`);
     }
-  
   }
 
   return (
@@ -122,7 +132,7 @@ export default function SpotForm() {
     >
 
       <div className="form-header">
-        <h1>Create a New Spot</h1>
+        <h1>{exsSpot ? `Update Your Spot`: `Create a New Spot`}</h1>
         <h2>Where's your place located?</h2>
         <p>Guests will only get your exact address once they booked a reservation</p>
       </div>
@@ -317,9 +327,8 @@ export default function SpotForm() {
 
       <button 
         type='submit'
-        // disabled = {Object.values(errs).length}
       >
-        Create Spot
+        {exsSpot ? `Update Spot` : `Create Spot`}
       </button>
     </form>
   )

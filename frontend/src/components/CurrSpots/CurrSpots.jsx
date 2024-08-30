@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import SpotsGrid from '../SpotsIndex/SpotsGrid';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
+// import SpotForm from '../SpotForm/SpotForm';
 
 
 export default function CurrSpots() {
@@ -24,6 +25,11 @@ export default function CurrSpots() {
 
   const spots = sessionUser?.spots ? Object.values(sessionUser.spots): [];
 
+  const handleUpdate = (spot) => {
+    navigate(`/spots/${spot.id}/edit`);
+  };
+
+
   if (!spots.length && !!sessionUser) {
     return (
       <Link to='/spots/new'>Create a New Spot</Link>
@@ -40,9 +46,9 @@ export default function CurrSpots() {
               <div key={spot.id}>
                 <SpotsGrid  spot={spot} />
                 <button
-                  onClick={() => navigate(`/spots/${spot.id}/edit`)}
+                  onClick={() => handleUpdate(spot)}
                 >Update</button>
-                {/* <button>Delete</button> */}
+
                 <OpenModalButton 
                   buttonText='Delete'
                   modalComponent={<DeleteSpotModal  spotId={spot.id} />}
