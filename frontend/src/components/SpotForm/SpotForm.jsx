@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {createSpotThunk, updateSpotThunk } from "../../store/spots";
+import {createSpotThunk, getAllSpotsThunk, updateSpotThunk } from "../../store/spots";
 import { addImgThunk } from "../../store/spotImage";
 import './SpotForm.css';
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,11 @@ import { useNavigate } from "react-router-dom";
 export default function SpotForm({ exsSpot, spotId }) {
   const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
-  const ownerId = sessionUser.id;
+  // if (!sessionUser) {
+  //   return (
+  //     <>You have to log in!</>
+  //   )
+  // }
   const navigate = useNavigate();
 
 
@@ -27,6 +31,14 @@ export default function SpotForm({ exsSpot, spotId }) {
   const [lat, setLat] = useState(exsSpot?.lat || "");
   const [lng, setLng] = useState(exsSpot?.lng || "");
   const [errs, setErrs] = useState({});
+
+  if (!sessionUser) {
+    return (
+      <>You have to log in!</>
+    )
+  }
+  const ownerId = sessionUser.id;
+
 
 
   const handleSumbit = async(e) => {
@@ -108,7 +120,7 @@ export default function SpotForm({ exsSpot, spotId }) {
         updatedSpot = await dispatch(createSpotThunk(newSpot));
       }
 
-      if (updatedSpot && updatedSpot.id) {
+      if (!exsSpot && updatedSpot && updatedSpot.id) {
         spotId = updatedSpot.id;
 
         if (previewImage.length) {
@@ -124,6 +136,7 @@ export default function SpotForm({ exsSpot, spotId }) {
           }
         }
       }
+      dispatch(getAllSpotsThunk());
       navigate(`/spots/${spotId}`);
     }
   }
@@ -272,71 +285,74 @@ export default function SpotForm({ exsSpot, spotId }) {
 
       <div className='form-divider'></div>
 
-      <div className="form-image">
-        <h3>Liven up your spot with photos</h3>
-        <p>Submit a link to at least one photo to publish your spot.</p>
+      {!exsSpot && 
+      (<>
+        <div className="form-image">
+          <h3>Liven up your spot with photos</h3>
+          <p>Submit a link to at least one photo to publish your spot.</p>
 
-        <label>
-          <input
-            type='text'
-            name='previewImage'
-            placeholder="Preview Image URL"
-            value={previewImage}
-            onChange={(e) => setPreviewImage(e.target.value)}
-          />
-        </label>
-        {errs.previewImage && <p className="form-errors">{errs.previewImage}</p>}
+          <label>
+            <input
+              type='text'
+              name='previewImage'
+              placeholder="Preview Image URL"
+              value={previewImage}
+              onChange={(e) => setPreviewImage(e.target.value)}
+            />
+          </label>
+          {errs.previewImage && <p className="form-errors">{errs.previewImage}</p>}
 
-        {errs.previewImageFormat && <p className="form-errors">{errs.previewImageFormat}</p>}
+          {errs.previewImageFormat && <p className="form-errors">{errs.previewImageFormat}</p>}
 
 
-        <label>
-          <input
-            type='text'
-            name='image1'
-            placeholder="Image URL"
-            value={image1}
-            onChange={(e) => setImage1(e.target.value)}
-          />
-        </label>
-        {errs.image1Format && <p className="form-errors">{errs.image1Format}</p>}
+          <label>
+            <input
+              type='text'
+              name='image1'
+              placeholder="Image URL"
+              value={image1}
+              onChange={(e) => setImage1(e.target.value)}
+            />
+          </label>
+          {errs.image1Format && <p className="form-errors">{errs.image1Format}</p>}
 
-        <label>
-          <input
-            type='text'
-            name='image2'
-            placeholder="Image URL"
-            value={image2}
-            onChange={(e) => setImage2(e.target.value)}
-          />
-        </label>
-        {errs.image2Format && <p className="form-errors">{errs.image2Format}</p>}
+          <label>
+            <input
+              type='text'
+              name='image2'
+              placeholder="Image URL"
+              value={image2}
+              onChange={(e) => setImage2(e.target.value)}
+            />
+          </label>
+          {errs.image2Format && <p className="form-errors">{errs.image2Format}</p>}
 
-        <label>
-          <input
-            type='text'
-            name='image3'
-            placeholder="Image URL"
-            value={image3}
-            onChange={(e) => setImage3(e.target.value)}
-          />
-        </label>
-        {errs.image3Format && <p className="form-errors">{errs.image3Format}</p>}
+          <label>
+            <input
+              type='text'
+              name='image3'
+              placeholder="Image URL"
+              value={image3}
+              onChange={(e) => setImage3(e.target.value)}
+            />
+          </label>
+          {errs.image3Format && <p className="form-errors">{errs.image3Format}</p>}
 
-        <label>
-          <input
-            type='text'
-            name='image4'
-            placeholder="Image URL"
-            value={image4}
-            onChange={(e) => setImage4(e.target.value)}
-          />
-        </label>
-        {errs.image4Format && <p className="form-errors">{errs.image4Format}</p>}
+          <label>
+            <input
+              type='text'
+              name='image4'
+              placeholder="Image URL"
+              value={image4}
+              onChange={(e) => setImage4(e.target.value)}
+            />
+          </label>
+          {errs.image4Format && <p className="form-errors">{errs.image4Format}</p>}
 
-      </div>
+        </div>
 
-      <div className='form-divider'></div>
+        <div className='form-divider'></div> 
+      </>)}
 
       <button 
         type='submit'

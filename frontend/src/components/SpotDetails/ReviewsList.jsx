@@ -8,6 +8,7 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton.jsx";
 import './SpotDetails.css';
 import PostReviewModal from "../PostReviewModal/PostReviewModal.jsx";
 import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal.jsx";
+import { formatRating } from "../../utils/util.js";
 
 export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerId }) {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ export default function ReviewsList({ spotId, reviewCount, avgStarRating, ownerI
 
       <div className="review-header">
         <h2>
-          <FontAwesomeIcon icon={faStar} /> {avgStarRating !== null ? Number(avgStarRating.toFixed(2)).toFixed(1) : `New`} {reviewCount}
+          <FontAwesomeIcon icon={faStar} /> {avgStarRating !== null ? formatRating(avgStarRating) : `New`} {reviewCount}
         </h2>
       </div>
 

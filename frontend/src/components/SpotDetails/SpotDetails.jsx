@@ -6,6 +6,7 @@ import './SpotDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import ReviewsList from "./ReviewsList";
+import { formatRating } from "../../utils/util";
 
 export default function SpotDetails() {
   const { id } = useParams();
@@ -37,7 +38,7 @@ export default function SpotDetails() {
     reviews = `· ${numReviews} Reviews`
   }
 
-  // console.log(ownerId)
+  console.log(avgStarRating);
   return (
     <div className="detail-spot-header">
 
@@ -93,7 +94,7 @@ export default function SpotDetails() {
           <div className="detail-price-review-rating">
             <p>${price} <span className="price-night">night</span></p>
 
-            <span className="avg-reviews"> <FontAwesomeIcon icon={faStar} /> {avgStarRating !== null ? Number(avgStarRating.toFixed(2)).toFixed(1) : `New`} {reviews}</span>
+            <span className="avg-reviews"> <FontAwesomeIcon icon={faStar} /> {avgStarRating !== null ? formatRating(avgStarRating) : `New`} {reviews}</span>
           </div>
 
           <button

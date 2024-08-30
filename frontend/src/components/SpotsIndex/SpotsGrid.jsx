@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import './SpotsIndex.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { formatRating } from "../../utils/util.js";
+
 
 
 export default function SpotsGrid({spot}) {
@@ -24,7 +26,7 @@ export default function SpotsGrid({spot}) {
         <div className="location-rating">
           <p>{city}, {state}</p>
           
-          <span> <FontAwesomeIcon icon={faStar} />   { avgRating && avgRating !== null ? Number(avgRating.toFixed(2)).toFixed(1) : `New`}</span>
+          <span> <FontAwesomeIcon icon={faStar} />   {avgRating && avgRating !== null ? formatRating(avgRating) : `New`}</span>
         </div>
 
         <p><strong>${price}</strong> night</p>
