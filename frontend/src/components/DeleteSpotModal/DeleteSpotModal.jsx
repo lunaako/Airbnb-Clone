@@ -6,7 +6,6 @@ import { getSessionSpotsThunk } from '../../store/session.js';
 
 
 export default function DeleteSpotModal({spotId}) {
-  // console.log(spotId)
   const { closeModal } = useModal();
   const dispatch = useDispatch();
 

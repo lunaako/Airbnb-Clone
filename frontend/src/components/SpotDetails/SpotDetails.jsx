@@ -38,7 +38,6 @@ export default function SpotDetails() {
     reviews = `· ${numReviews} Reviews`
   }
 
-  console.log(avgStarRating);
   return (
     <div className="detail-spot-header">
 

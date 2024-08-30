@@ -39,7 +39,7 @@ export default function SpotForm({ exsSpot, spotId }) {
   }
   const ownerId = sessionUser.id;
 
-
+  // console.log(ownerId)
 
   const handleSumbit = async(e) => {
 
@@ -89,11 +89,13 @@ export default function SpotForm({ exsSpot, spotId }) {
       }
     }
     
-    imgUrlFormatCheck('previewImageFormat', previewImage);
-    imgUrlFormatCheck('image1Format', image1);
-    imgUrlFormatCheck('image2Format', image2);
-    imgUrlFormatCheck('image3Format', image3);
-    imgUrlFormatCheck('image4Format', image4);
+    if(!exsSpot) {
+      imgUrlFormatCheck('previewImageFormat', previewImage);
+      imgUrlFormatCheck('image1Format', image1);
+      imgUrlFormatCheck('image2Format', image2);
+      imgUrlFormatCheck('image3Format', image3);
+      imgUrlFormatCheck('image4Format', image4);
+    }
 
     setErrs(errors);
 
