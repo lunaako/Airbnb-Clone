@@ -1,9 +1,4 @@
-#modal-content {
-  width: 50%;
-  height: fit-content;
-  border-radius: 10px;
-  padding-bottom: 5%;
-}
+
 
 .delete-spot-modal-container {
   display: flex;

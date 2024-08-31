@@ -1,13 +1,4 @@
 
-
-#modal-content {
-  width: 50%;
-  height: fit-content;
-  border-radius: 10px;
-  padding-bottom: 5%;
-}
-
-
 form {
   display: flex;
   flex-direction: column;
