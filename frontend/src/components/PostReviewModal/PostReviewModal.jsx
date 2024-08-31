@@ -65,6 +65,7 @@ export default function PostReviewModal({spotId}) {
           <span className="star-label">Stars</span>
         </div>
         <button
+          className='post-review-button'
           type='submit'
           disabled={Object.values(errors).length}
           onClick={handleSubmit}
