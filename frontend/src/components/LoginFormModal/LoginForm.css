@@ -48,8 +48,10 @@ form {
   background-color: white;
   text-decoration: underline;
   margin-top: 30px;
-  margin-left: 40%;
+  /* margin-left: 40%; */
   font-size: 18px;
   cursor: pointer;
+  text-align: center;
+  width: 100%;
 }
 

@@ -34,7 +34,7 @@ function LoginFormModal() {
           <p style={{color: 'red', textAlign: 'center'}}>{errors.credential}</p>
         )}
 
-      <form onSubmit={handleSubmit}>
+      <form className="profile-login-modal" onSubmit={handleSubmit}>
         <label className="loginLabel">
           Username or Email
           <input
