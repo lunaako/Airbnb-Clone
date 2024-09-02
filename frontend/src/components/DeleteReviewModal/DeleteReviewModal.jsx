@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { deleteReviewThunk } from '../../store/reviews';
 import { getASpotThunk } from '../../store/currSpot';
 import { getReviewsThunk } from '../../store/reviews';
+import { getAllSpotsThunk } from '../../store/spots';
 
 export default function DeleteReviewModal({ reviewId, spotId }) {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export default function DeleteReviewModal({ reviewId, spotId }) {
         onClick={() => dispatch(deleteReviewThunk(reviewId))
                 .then(() => dispatch(getASpotThunk(spotId)))
                 .then(() => dispatch(getReviewsThunk(spotId)))
+                .then(() => dispatch(getAllSpotsThunk()))
                 .then(closeModal)}
       >
         Yes (Delete Review)

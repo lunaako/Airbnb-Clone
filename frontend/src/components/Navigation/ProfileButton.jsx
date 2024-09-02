@@ -7,6 +7,9 @@ import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -46,9 +49,12 @@ function ProfileButton({ user }) {
 
   return (
     <>
+      <FontAwesomeIcon icon={faBars} className='menu-icon' onClick={toggleMenu} />
       <button className="profile-button" onClick={toggleMenu}>
         <FaUserCircle />
       </button>
+
+
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>

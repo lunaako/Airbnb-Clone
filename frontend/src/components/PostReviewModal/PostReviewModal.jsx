@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import './PostReview.css';
 import { createReviewThunk, getReviewsThunk } from '../../store/reviews';
 import { getASpotThunk } from '../../store/currSpot';
-
+import { getAllSpotsThunk } from '../../store/spots';
 
 export default function PostReviewModal({spotId}) {
 
@@ -20,6 +20,7 @@ export default function PostReviewModal({spotId}) {
     dispatch(createReviewThunk(newReview, stars, spotId))
       .then(() => dispatch(getASpotThunk(spotId)))
       .then(() => dispatch(getReviewsThunk(spotId)))
+      .then(() => dispatch(getAllSpotsThunk()))
       .then(closeModal)
       .catch(e => setErrors(e.message));
   }

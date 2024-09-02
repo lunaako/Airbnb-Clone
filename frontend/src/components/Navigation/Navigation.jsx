@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
 import navLogo from '../../images/logo1.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -35,7 +35,7 @@ function Navigation({ isLoaded }) {
 
         {isLoaded && (
           <li className='nav-link profile'>
-            <FontAwesomeIcon icon={faBars} className='menu-icon'/>
+
             <ProfileButton user={sessionUser} />
           </li>
         )}

@@ -9,7 +9,6 @@ import { formatRating } from "../../utils/util.js";
 export default function SpotsGrid({spot}) {
   const { id, city, state, price, avgRating, previewImage, name } = spot;
   const navigate = useNavigate();
-  // console.log(city);
 
   return (
     <div 

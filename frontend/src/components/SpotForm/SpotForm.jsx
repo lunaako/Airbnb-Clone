@@ -8,13 +8,8 @@ import { useNavigate } from "react-router-dom";
 export default function SpotForm({ exsSpot, spotId }) {
   const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
-  // if (!sessionUser) {
-  //   return (
-  //     <>You have to log in!</>
-  //   )
-  // }
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
 
   const [country, setCountry] = useState(exsSpot?.country || '');
   const [address, setAddress] = useState(exsSpot?.address || '');
@@ -70,6 +65,8 @@ export default function SpotForm({ exsSpot, spotId }) {
     }
     if (description.length < 30) {
       errors.description = 'Description needs a minimum of 30 characters'
+    } else if (description.length > 500) {
+      errors.description = 'Description needs to be less than 500 characters'
     }
     if(!name.length) {
       errors.name = 'Name is required'
@@ -78,6 +75,8 @@ export default function SpotForm({ exsSpot, spotId }) {
     }
     if (price === 0) {
       errors.price = 'Price is required'
+    } else if (price < 0) {
+      errors.price = 'Price cannot be less than 0'
     }
     if (!previewImage.length) {
       errors.previewImage = 'Preview image is required'
