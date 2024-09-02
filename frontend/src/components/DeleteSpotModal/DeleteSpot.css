@@ -8,15 +8,16 @@
 }
 
 .delete-spot-header h1 {
+  width: 90%;
+  margin: auto;
   text-align: center;
   margin-top: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .delete-spot-header p {
-  width: 100%;
-  margin-left: 0;
-  margin-right: 40px;
+  width: 90%;
+  margin: auto;
 }
 
 .delete-spot-modal-container button {
