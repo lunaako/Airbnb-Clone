@@ -4,6 +4,7 @@ import {createSpotThunk, getAllSpotsThunk, updateSpotThunk } from "../../store/s
 import { addImgThunk } from "../../store/spotImage";
 import './SpotForm.css';
 import { useNavigate } from "react-router-dom";
+import { getASpotThunk } from "../../store/currSpot";
 
 export default function SpotForm({ exsSpot, spotId }) {
   const dispatch = useDispatch();
@@ -133,8 +134,8 @@ export default function SpotForm({ exsSpot, spotId }) {
         for (let url of images) {
           if (url) {
             const img = { url, preview: false };
-            dispatch(addImgThunk(img, spotId))
-              .then(dispatch(getAllSpotsThunk()))
+            await dispatch(addImgThunk(img, spotId));
+            await dispatch(getASpotThunk(spotId));
           }
         }
       }
