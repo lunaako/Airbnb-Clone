@@ -40,6 +40,12 @@ export default function CurrSpots() {
     )
   }
 
+  const handleDivClick = (e, spot) => {
+    if(e.target.tagName !== 'BUTTON') {
+      navigate(`/spots/${spot.id}`)
+    }
+  }
+
   return (
     <div className='manage-spots-whole'>
       <h1>Manage Spots</h1>
@@ -47,7 +53,11 @@ export default function CurrSpots() {
         {loaded && !!spots.length &&
           (
             spots.map(spot => (
-              <div key={spot.id} className='manage-spots-blocks'>
+              <div 
+                key={spot.id} 
+                className='manage-spots-blocks'
+                onClick={(e) => handleDivClick(e, spot)}
+              >
                 <SpotsGrid  spot={spot} />
                 <button
                   onClick={() => handleUpdate(spot)}
