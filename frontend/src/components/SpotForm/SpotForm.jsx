@@ -133,7 +133,8 @@ export default function SpotForm({ exsSpot, spotId }) {
         for (let url of images) {
           if (url) {
             const img = { url, preview: false };
-            dispatch(addImgThunk(img, spotId));
+            dispatch(addImgThunk(img, spotId))
+              .then(dispatch(getAllSpotsThunk()))
           }
         }
       }
