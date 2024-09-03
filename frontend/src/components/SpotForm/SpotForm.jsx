@@ -139,8 +139,8 @@ export default function SpotForm({ exsSpot, spotId }) {
           }
         }
       }
-      dispatch(getAllSpotsThunk());
-      navigate(`/spots/${spotId}`);
+      await dispatch(getAllSpotsThunk())
+        .then(navigate(`/spots/${spotId}`))
     }
   }
 
